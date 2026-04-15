@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { randomUUID } from 'node:crypto'
+import { randomBytes } from 'node:crypto'
 import { getRazorpayCredentials, razorpayPlan } from '@/lib/razorpay'
 
 export const runtime = 'nodejs'
@@ -8,7 +8,7 @@ export async function POST() {
 	try {
 		const { keyId, keySecret } = getRazorpayCredentials()
 		const authToken = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
-		const receipt = `vedsecure-${randomUUID()}`
+		const receipt = `ved-${Date.now()}-${randomBytes(4).toString('hex')}`
 
 		const response = await fetch('https://api.razorpay.com/v1/orders', {
 			method: 'POST',
