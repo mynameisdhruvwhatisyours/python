@@ -2,25 +2,17 @@
 
 import { useEffect, useState, type FC } from 'react'
 import GridCell from './grid-cell'
-import Logo1 from '@/assets/logo-1.svg'
-import Logo2 from '@/assets/logo-2.svg'
-import Logo3 from '@/assets/logo-3.svg'
-import Logo4 from '@/assets/logo-4.svg'
-import Logo5 from '@/assets/logo-5.svg'
-import Logo6 from '@/assets/logo-6.svg'
-import Logo7 from '@/assets/logo-7.svg'
-import Logo8 from '@/assets/logo-8.svg'
-import Logo9 from '@/assets/logo-9.svg'
-import Logo10 from '@/assets/logo-10.svg'
-import Logo11 from '@/assets/logo-11.svg'
-import Logo12 from '@/assets/logo-12.svg'
-import Logo13 from '@/assets/logo-13.svg'
-import Logo14 from '@/assets/logo-14.svg'
-import Logo15 from '@/assets/logo-15.svg'
-import Logo16 from '@/assets/logo-16.svg'
-import Logo17 from '@/assets/logo-17.svg'
-import Logo18 from '@/assets/logo-18.svg'
 import styles from './styles.module.css'
+
+const layers = [
+	['Perplexity', 'Supercell', 'Watershed', 'Raycast', 'Netlify', 'together.ai'],
+	['Netlify', 'Perplexity', 'together.ai', 'Supercell', 'Watershed', 'Raycast'],
+	['Watershed', 'Raycast', 'Perplexity', 'together.ai', 'Supercell', 'Netlify'],
+]
+
+const NameMark = ({ name }: { name: string }) => (
+	<span className={styles.name__mark}>{name}</span>
+)
 
 const CustomerList: FC = () => {
 	const [layer, setLayer] = useState<number>(1)
@@ -37,39 +29,39 @@ const CustomerList: FC = () => {
 			<div className={styles.logo__grid}>
 				<GridCell
 					layer={layer}
-					icon1={<Logo1 />}
-					icon2={<Logo2 />}
-					icon3={<Logo3 />}
+					icon1={<NameMark name={layers[0][0]} />}
+					icon2={<NameMark name={layers[1][0]} />}
+					icon3={<NameMark name={layers[2][0]} />}
 				/>
 				<GridCell
 					layer={layer}
-					icon1={<Logo4 />}
-					icon2={<Logo5 />}
-					icon3={<Logo6 />}
+					icon1={<NameMark name={layers[0][1]} />}
+					icon2={<NameMark name={layers[1][1]} />}
+					icon3={<NameMark name={layers[2][1]} />}
 				/>
 				<GridCell
 					layer={layer}
-					icon1={<Logo7 />}
-					icon2={<Logo8 />}
-					icon3={<Logo9 />}
+					icon1={<NameMark name={layers[0][2]} />}
+					icon2={<NameMark name={layers[1][2]} />}
+					icon3={<NameMark name={layers[2][2]} />}
 				/>
 				<GridCell
 					layer={layer}
-					icon1={<Logo10 />}
-					icon2={<Logo11 />}
-					icon3={<Logo12 />}
+					icon1={<NameMark name={layers[0][3]} />}
+					icon2={<NameMark name={layers[1][3]} />}
+					icon3={<NameMark name={layers[2][3]} />}
 				/>
 				<GridCell
 					layer={layer}
-					icon1={<Logo13 />}
-					icon2={<Logo14 />}
-					icon3={<Logo15 />}
+					icon1={<NameMark name={layers[0][4]} />}
+					icon2={<NameMark name={layers[1][4]} />}
+					icon3={<NameMark name={layers[2][4]} />}
 				/>
 				<GridCell
 					layer={layer}
-					icon1={<Logo16 />}
-					icon2={<Logo17 />}
-					icon3={<Logo18 />}
+					icon1={<NameMark name={layers[0][5]} />}
+					icon2={<NameMark name={layers[1][5]} />}
+					icon3={<NameMark name={layers[2][5]} />}
 				/>
 			</div>
 		</div>

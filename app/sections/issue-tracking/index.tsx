@@ -20,7 +20,10 @@ import LayoutWrapper from '@/components/layout-wrapper'
 
 const IssueTracking: FC = () => {
 	return (
-		<section className={styles.issue__tracking}>
+		<section
+			id='threats'
+			className={styles.issue__tracking}
+			style={{ scrollMarginTop: 'calc(var(--header-top) + var(--header-height) + 24px)' }}>
 			<LayoutWrapper>
 				<div className={styles.heading__container}>
 					<div className={styles.heading__inner__container}>

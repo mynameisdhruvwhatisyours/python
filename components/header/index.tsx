@@ -22,35 +22,35 @@ const Header: FC = () => {
 							</li>
 
 							<li className={cn(styles.hide__mobile, styles.header__trigger)}>
-								<Link className={styles.header__link} href='#'>
+								<Link className={styles.header__link} href='/#protection'>
 									{' '}
 									Protection{' '}
 								</Link>
 							</li>
 
 							<li className={cn(styles.hide__laptop, styles.header__item)}>
-								<Link className={styles.header__link} href='#'>
+								<Link className={styles.header__link} href='/#threats'>
 									{' '}
 									Threats{' '}
 								</Link>
 							</li>
 
 							<li className={cn(styles.hide__laptop, styles.header__item)}>
-								<Link className={styles.header__link} href='#'>
+								<Link className={styles.header__link} href='/#clients'>
 									{' '}
 									Clients{' '}
 								</Link>
 							</li>
 
 							<li className={cn(styles.hide__tablet, styles.header__item)}>
-								<Link className={styles.header__link} href='#'>
+								<Link className={styles.header__link} href='/#updates'>
 									{' '}
 									Updates{' '}
 								</Link>
 							</li>
 
 							<li className={cn(styles.hide__mobile, styles.header__item)}>
-								<Link className={styles.header__link} href='#'>
+								<Link className={styles.header__link} href='/#pricing'>
 									{' '}
 									Pricing{' '}
 								</Link>

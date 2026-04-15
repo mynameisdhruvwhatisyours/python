@@ -17,3 +17,7 @@
 .grid__item .item svg {
 	@apply fill-[var(--color-text-primary)] w-[150px] h-auto flex-shrink-0;
 }
+
+.name__mark {
+	@apply text-white text-[26px] tracking-[-0.04em] font-medium whitespace-nowrap;
+}

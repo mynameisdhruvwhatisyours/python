@@ -45,3 +45,19 @@
 .customers .customer__marquee__container {
 	@apply md:hidden;
 }
+
+.customers .client__stories {
+	@apply grid gap-4 md:grid-cols-2 xl:grid-cols-3 mt-10;
+}
+
+.customers .client__story {
+	@apply rounded-[24px] border border-white/10 bg-[rgba(255,255,255,0.03)] p-5;
+}
+
+.customers .client__name {
+	@apply text-white text-[15px] font-medium tracking-[-0.18px] mb-3;
+}
+
+.customers .client__copy {
+	@apply text-[var(--color-text-tertiary)] text-sm leading-6 tracking-[-0.16px];
+}

@@ -6,6 +6,8 @@ import LongTermPlanning from './sections/long-term-planning'
 import IssueTracking from './sections/issue-tracking'
 import Collaborate from './sections/collaborate'
 import Foundation from './sections/foundation'
+import Updates from './sections/updates'
+import Pricing from './sections/pricing'
 import PreFooter from './sections/prefooter'
 import AmbientLighting from '@/components/ambient-lighting'
 
@@ -20,6 +22,8 @@ const Home: FC = () => {
 			<IssueTracking />
 			<Collaborate />
 			<Foundation />
+			<Updates />
+			<Pricing />
 			<PreFooter />
 		</main>
 	)

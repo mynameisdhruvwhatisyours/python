@@ -6,7 +6,10 @@ import styles from './styles.module.css'
 
 const ModernProductTeams: FC = () => {
 	return (
-		<section className={styles.modern__product__teams}>
+		<section
+			id='protection'
+			className={styles.modern__product__teams}
+			style={{ scrollMarginTop: 'calc(var(--header-top) + var(--header-height) + 24px)' }}>
 			<LayoutWrapper>
 				<SectionHeading />
 			</LayoutWrapper>

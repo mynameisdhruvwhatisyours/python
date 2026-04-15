@@ -32,6 +32,10 @@
 	@apply flex-shrink-0 fill-[var(--color-text-primary)] max-w-[120px];
 }
 
+.marquee .marquee__container .marquee__inner__container .client__item {
+	@apply text-white text-sm font-medium tracking-[-0.18px] rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 whitespace-nowrap;
+}
+
 @keyframes Marquee_scroll {
 	0% {
 		transform: translate3d(0%, 0, 0);
