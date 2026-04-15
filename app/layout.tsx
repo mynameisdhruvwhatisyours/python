@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ClerkProvider } from '@clerk/nextjs'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Header from '@/components/header'
@@ -19,11 +20,13 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body>
-				<Header />
-				{children}
-				<Footer />
-				<Analytics />
-				<SpeedInsights />
+				<ClerkProvider>
+					<Header />
+					{children}
+					<Footer />
+					<Analytics />
+					<SpeedInsights />
+				</ClerkProvider>
 			</body>
 		</html>
 	)
