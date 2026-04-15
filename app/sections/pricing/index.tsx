@@ -1,6 +1,7 @@
 import { type FC } from 'react'
-import Link from 'next/link'
 import LayoutWrapper from '@/components/layout-wrapper'
+import { razorpayPlan } from '@/lib/razorpay'
+import PurchaseButton from './purchase-button'
 
 const pricingPoints = [
 	'Continuous device protection and scheduled scans',
@@ -26,23 +27,29 @@ const Pricing: FC = () => {
 								One simple vedSecure plan for teams that want strong protection.
 							</h2>
 							<p className='mt-5 max-w-2xl text-sm leading-6 text-[var(--color-text-tertiary)] sm:text-base'>
-								Start with a clean monthly plan today, then connect the same CTA
-								to Razorpay later without reworking the layout.
+								Launch checkout directly from this page with Razorpay, then wire
+								the verified payment into your provisioning, onboarding, or
+								subscription flow when you are ready.
 							</p>
 						</div>
 
 						<div className='rounded-[28px] border border-white/10 bg-[#111315] p-7 text-white shadow-[0_24px_80px_rgba(0,0,0,0.28)]'>
 							<p className='text-sm uppercase tracking-[0.22em] text-[#7f838a]'>
-								vedSecure Core
+								{razorpayPlan.name}
 							</p>
 							<div className='mt-4 flex items-end gap-2'>
 								<span className='text-[56px] font-medium leading-none tracking-[-0.05em]'>
-									$120
+									{razorpayPlan.displayPrice}
 								</span>
 								<span className='pb-2 text-sm text-[var(--color-text-tertiary)]'>
-									/month
+									{razorpayPlan.intervalLabel}
 								</span>
 							</div>
+							<p className='mt-3 text-sm leading-6 text-[var(--color-text-tertiary)]'>
+								Checkout creates a secure Razorpay order in{' '}
+								{razorpayPlan.currency}. You can change the billed currency and
+								amount later with environment variables.
+							</p>
 
 							<div className='mt-6 space-y-3'>
 								{pricingPoints.map((point) => (
@@ -54,12 +61,7 @@ const Pricing: FC = () => {
 								))}
 							</div>
 
-							<Link
-								href='/#pricing'
-								aria-disabled='true'
-								className='mt-6 inline-flex h-11 items-center justify-center rounded-[12px] bg-white px-5 text-sm font-medium text-black transition hover:bg-[#f2f2f2]'>
-								Purchase Now
-							</Link>
+							<PurchaseButton />
 						</div>
 					</div>
 				</div>
