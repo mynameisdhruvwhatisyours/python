@@ -11,6 +11,19 @@ type CreateOrderResponse = {
 	currency: string
 	name: string
 	description: string
+	displayPrice: string
+	methodSummary: string
+	marketLabel: string
+	checkoutDisplay?: {
+		sequence?: string[]
+		hide?: Array<{
+			method: string
+			banks?: string[]
+		}>
+		preferences?: {
+			show_default_blocks?: boolean
+		}
+	}
 }
 
 type CreateOrderError = {
@@ -83,6 +96,9 @@ const PurchaseButton = () => {
 				currency: orderData.currency,
 				name: orderData.name,
 				description: orderData.description,
+				config: {
+					display: orderData.checkoutDisplay,
+				},
 				theme: { color: '#f4f4f5' },
 				handler: async (response) => {
 					const verifyResponse = await fetch('/api/razorpay/verify', {
@@ -122,7 +138,9 @@ const PurchaseButton = () => {
 
 			razorpay.open()
 			setState('idle')
-			setMessage('Checkout opened. Complete payment to verify your order.')
+			setMessage(
+				`Checkout opened for ${orderData.marketLabel}. Available methods are tuned for ${orderData.methodSummary.toLowerCase()}.`
+			)
 		} catch (error) {
 			setState('error')
 			setMessage(

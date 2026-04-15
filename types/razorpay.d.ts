@@ -24,6 +24,18 @@ type RazorpayCheckoutOptions = {
 	modal?: {
 		ondismiss?: () => void
 	}
+	config?: {
+		display?: {
+			sequence?: string[]
+			hide?: Array<{
+				method: string
+				banks?: string[]
+			}>
+			preferences?: {
+				show_default_blocks?: boolean
+			}
+		}
+	}
 }
 
 type RazorpayInstance = {

@@ -1,14 +1,22 @@
 import { NextResponse } from 'next/server'
 import { randomBytes } from 'node:crypto'
-import { getRazorpayCredentials, razorpayPlan } from '@/lib/razorpay'
+import {
+	getCountryCodeFromHeaders,
+	getRazorpayCredentials,
+	razorpayPlan,
+	resolveBillingMarket,
+} from '@/lib/razorpay'
 
 export const runtime = 'nodejs'
 
-export async function POST() {
+export async function POST(request: Request) {
 	try {
 		const { keyId, keySecret } = getRazorpayCredentials()
 		const authToken = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
 		const receipt = `ved-${Date.now()}-${randomBytes(4).toString('hex')}`
+		const billingMarket = resolveBillingMarket(
+			getCountryCodeFromHeaders(request.headers)
+		)
 
 		const response = await fetch('https://api.razorpay.com/v1/orders', {
 			method: 'POST',
@@ -17,12 +25,13 @@ export async function POST() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				amount: razorpayPlan.amount,
-				currency: razorpayPlan.currency,
+				amount: billingMarket.amount,
+				currency: billingMarket.currency,
 				receipt,
 				notes: {
 					product: razorpayPlan.name,
 					billing_cycle: 'monthly',
+					market: billingMarket.label,
 				},
 			}),
 			cache: 'no-store',
@@ -68,6 +77,10 @@ export async function POST() {
 			currency: order.currency,
 			name: razorpayPlan.name,
 			description: razorpayPlan.description,
+			displayPrice: billingMarket.displayPrice,
+			methodSummary: billingMarket.methodSummary,
+			marketLabel: billingMarket.label,
+			checkoutDisplay: billingMarket.checkoutDisplay,
 			receipt,
 		})
 	} catch (error) {

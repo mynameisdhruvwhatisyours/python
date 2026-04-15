@@ -1,6 +1,11 @@
 import { type FC } from 'react'
+import { headers } from 'next/headers'
 import LayoutWrapper from '@/components/layout-wrapper'
-import { razorpayPlan } from '@/lib/razorpay'
+import {
+	getCountryCodeFromHeaders,
+	razorpayPlan,
+	resolveBillingMarket,
+} from '@/lib/razorpay'
 import PurchaseButton from './purchase-button'
 
 const pricingPoints = [
@@ -11,6 +16,10 @@ const pricingPoints = [
 ]
 
 const Pricing: FC = () => {
+	const billingMarket = resolveBillingMarket(
+		getCountryCodeFromHeaders(headers())
+	)
+
 	return (
 		<section
 			id='pricing'
@@ -39,16 +48,18 @@ const Pricing: FC = () => {
 							</p>
 							<div className='mt-4 flex items-end gap-2'>
 								<span className='text-[56px] font-medium leading-none tracking-[-0.05em]'>
-									{razorpayPlan.displayPrice}
+									{billingMarket.displayPrice}
 								</span>
 								<span className='pb-2 text-sm text-[var(--color-text-tertiary)]'>
-									{razorpayPlan.intervalLabel}
+									{billingMarket.intervalLabel}
 								</span>
 							</div>
 							<p className='mt-3 text-sm leading-6 text-[var(--color-text-tertiary)]'>
-								Checkout creates a secure Razorpay order in{' '}
-								{razorpayPlan.currency}. You can change the billed currency and
-								amount later with environment variables.
+								Visitors from {billingMarket.label} will be billed in{' '}
+								{billingMarket.currency}, and checkout is tuned for{' '}
+								{billingMarket.methodSummary.toLowerCase()}. This behavior works
+								automatically by region, with optional env overrides only if
+								you want custom pricing later.
 							</p>
 
 							<div className='mt-6 space-y-3'>
