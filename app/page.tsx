@@ -6,6 +6,7 @@ import LongTermPlanning from './sections/long-term-planning'
 import IssueTracking from './sections/issue-tracking'
 import Collaborate from './sections/collaborate'
 import Foundation from './sections/foundation'
+import Shield from './sections/shield'
 import Updates from './sections/updates'
 import Pricing from './sections/pricing'
 import PreFooter from './sections/prefooter'
@@ -22,6 +23,7 @@ const Home: FC = () => {
 			<IssueTracking />
 			<Collaborate />
 			<Foundation />
+			<Shield />
 			<Updates />
 			<Pricing />
 			<PreFooter />

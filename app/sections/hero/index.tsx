@@ -34,14 +34,14 @@ const Hero: FC = () => {
 
 				<div className={cn(styles.button__container)}>
 					<BlurPopUp delay={1.1}>
-						<Link className={styles.start__link} href='#'>
+						<Link className={styles.start__link} href='/sign-up'>
 							{' '}
 							Start protection{' '}
 						</Link>
 					</BlurPopUp>
 
 					<BlurPopUp delay={1.15}>
-						<Link className={styles.intoducing__link} href='#'>
+						<Link className={styles.intoducing__link} href='/#shield'>
 							<span>Introducing vedSecure Shield</span>
 							<ChevronRight />
 						</Link>

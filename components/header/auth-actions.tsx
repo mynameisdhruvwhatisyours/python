@@ -26,7 +26,7 @@ const AuthActions = () => {
 						styles.header__button,
 						styles.header__signup,
 					)}>
-					<Link className={cn(styles.header__link, styles.button__signup)} href='/sign-up'>
+					<Link className={cn(styles.header__link, styles.button__signup)} href='/#shield'>
 						Get protected
 					</Link>
 				</li>
@@ -43,6 +43,17 @@ const AuthActions = () => {
 						className={cn(styles.header__link, styles.button__login)}
 						href='/dashboard'>
 						Dashboard
+					</Link>
+				</li>
+
+				<li
+					className={cn(
+						styles.header__item,
+						styles.header__button,
+						styles.header__signup,
+					)}>
+					<Link className={cn(styles.header__link, styles.button__signup)} href='/#shield'>
+						Get protected
 					</Link>
 				</li>
 
