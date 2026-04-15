@@ -30,11 +30,30 @@ export async function POST() {
 
 		if (!response.ok) {
 			const errorBody = await response.text()
+			let details = errorBody || response.statusText
+
+			try {
+				const parsedError = JSON.parse(errorBody) as {
+					error?: {
+						description?: string
+						code?: string
+						reason?: string
+					}
+				}
+
+				details =
+					parsedError.error?.description ??
+					parsedError.error?.reason ??
+					parsedError.error?.code ??
+					details
+			} catch {
+				// Keep the raw response text when Razorpay does not return JSON.
+			}
 
 			return NextResponse.json(
 				{
 					error: 'Unable to create Razorpay order.',
-					details: errorBody || response.statusText,
+					details,
 				},
 				{ status: 500 }
 			)

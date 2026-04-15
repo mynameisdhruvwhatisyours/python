@@ -70,7 +70,9 @@ const PurchaseButton = () => {
 			if (!orderResponse.ok || !('orderId' in orderData)) {
 				const errorData = orderData as CreateOrderError
 				throw new Error(
-					errorData.error ?? 'Unable to start checkout right now.'
+					errorData.details ??
+						errorData.error ??
+						'Unable to start checkout right now.'
 				)
 			}
 
