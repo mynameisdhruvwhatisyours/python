@@ -56,13 +56,6 @@ const Header: FC = () => {
 								</Link>
 							</li>
 
-							<li className={cn(styles.hide__mobile, styles.header__trigger)}>
-								<Link className={styles.header__link} href='#'>
-									{' '}
-									Company{' '}
-								</Link>
-							</li>
-
 							<li className={cn(styles.hide__tablet, styles.header__item)}>
 								<Link className={styles.header__link} href='#'>
 									{' '}

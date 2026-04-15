@@ -58,7 +58,7 @@ const Pricing: FC = () => {
 								href='/#pricing'
 								aria-disabled='true'
 								className='mt-6 inline-flex h-11 items-center justify-center rounded-[12px] bg-white px-5 text-sm font-medium text-black transition hover:bg-[#f2f2f2]'>
-								Connect Razorpay Later
+								Purchase Now
 							</Link>
 						</div>
 					</div>
