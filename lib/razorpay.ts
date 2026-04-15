@@ -28,9 +28,9 @@ const internationalCurrency = process.env.RAZORPAY_INTL_PLAN_CURRENCY ?? 'USD'
 const internationalDisplayPrice =
 	process.env.RAZORPAY_INTL_DISPLAY_PRICE ?? '$120'
 
-const indiaAmount = Number(process.env.RAZORPAY_INDIA_PLAN_AMOUNT ?? '799900')
+const indiaAmount = Number(process.env.RAZORPAY_INDIA_PLAN_AMOUNT ?? '1106400')
 const indiaCurrency = process.env.RAZORPAY_INDIA_PLAN_CURRENCY ?? 'INR'
-const indiaDisplayPrice = process.env.RAZORPAY_INDIA_DISPLAY_PRICE ?? '₹7,999'
+const indiaDisplayPrice = process.env.RAZORPAY_INDIA_DISPLAY_PRICE ?? '₹11,064'
 
 export const razorpayPlan = {
 	name: PLAN_NAME,
