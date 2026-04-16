@@ -18,7 +18,7 @@ export function DocsShell({
 }) {
 	return (
 		<main className='min-h-screen bg-[#090a0b] pt-[calc(var(--header-top)+var(--header-height)+32px)] text-white'>
-			<div className='mx-auto max-w-[1440px] px-6 pb-24 lg:px-8'>
+			<div className='mx-auto max-w-[1440px] px-6 pb-32 lg:px-8'>
 				<div className='mb-10 rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-8 md:p-10'>
 					<p className='mb-4 text-sm uppercase tracking-[0.3em] text-[#7f838a]'>{eyebrow}</p>
 					<h1 className='max-w-5xl text-4xl font-medium leading-tight tracking-[-0.045em] text-white sm:text-6xl'>
@@ -36,8 +36,8 @@ export function DocsShell({
 				</div>
 
 				<div className='grid gap-10 xl:grid-cols-[280px_minmax(0,1fr)_220px]'>
-					<aside className='xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)]'>
-						<div className='rounded-[24px] border border-white/10 bg-white/[0.03] p-5'>
+					<aside className='xl:sticky xl:top-28 xl:self-start'>
+						<div className='max-h-[calc(100vh-9rem)] overflow-y-auto rounded-[24px] border border-white/10 bg-white/[0.03] p-5 pr-3'>
 							<p className='mb-4 text-xs uppercase tracking-[0.24em] text-[#7f838a]'>Browse docs</p>
 							<div className='space-y-6'>
 								{docsCategories.map((category) => (
@@ -70,8 +70,8 @@ export function DocsShell({
 
 					<div className='space-y-16'>{children}</div>
 
-					<aside className='hidden xl:block xl:sticky xl:top-28 xl:h-[calc(100vh-8rem)]'>
-						<div className='rounded-[24px] border border-white/10 bg-white/[0.03] p-5'>
+					<aside className='hidden xl:block xl:sticky xl:top-28 xl:self-start'>
+						<div className='max-h-[calc(100vh-9rem)] overflow-y-auto rounded-[24px] border border-white/10 bg-white/[0.03] p-5 pr-3'>
 							<p className='mb-4 text-xs uppercase tracking-[0.24em] text-[#7f838a]'>On this page</p>
 							<div className='space-y-2'>
 								{toc.map((item) => (
