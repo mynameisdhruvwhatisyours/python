@@ -36,6 +36,7 @@ type RazorpayCheckoutOptions = {
 			}
 		}
 	}
+	method?: Partial<Record<'card' | 'upi' | 'netbanking' | 'wallet', boolean>>
 }
 
 type RazorpayInstance = {

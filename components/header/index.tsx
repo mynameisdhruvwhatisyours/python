@@ -64,7 +64,9 @@ const Header: FC = () => {
 							</li>
 
 							<li className={cn(styles.hide__tablet, styles.header__item)}>
-								<Link className={styles.header__link} href='#'>
+								<Link
+									className={styles.header__link}
+									href='mailto:sales@vedsecure.com'>
 									{' '}
 									Contact{' '}
 								</Link>
@@ -78,9 +80,9 @@ const Header: FC = () => {
 									styles.header__button,
 									styles.header__menu,
 								)}>
-								<button>
+								<Link href='/#pricing' aria-label='Open pricing'>
 									<Menu />
-								</button>
+								</Link>
 							</li>
 						</ul>
 					</div>

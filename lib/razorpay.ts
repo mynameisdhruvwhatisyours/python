@@ -1,3 +1,5 @@
+export type PaymentMethod = 'all' | 'card' | 'upi' | 'netbanking' | 'wallet'
+
 export type BillingMarket = {
 	code: 'IN' | 'GLOBAL'
 	label: string
@@ -7,32 +9,29 @@ export type BillingMarket = {
 	displayPrice: string
 	intervalLabel: string
 	methodSummary: string
-	checkoutDisplay?: {
-		sequence?: string[]
-		hide?: Array<{
-			method: string
-			banks?: string[]
-		}>
-		preferences?: {
-			show_default_blocks?: boolean
-		}
+	checkoutDisplay?: RazorpayCheckoutDisplay
+}
+
+export type RazorpayCheckoutDisplay = {
+	sequence?: string[]
+	hide?: Array<{
+		method: string
+		banks?: string[]
+	}>
+	preferences?: {
+		show_default_blocks?: boolean
 	}
 }
 
 const PLAN_NAME = 'vedSecure Core'
 const PLAN_DESCRIPTION =
 	'Monthly access to vedSecure endpoint protection and response controls.'
-
-const internationalAmount = Number(process.env.RAZORPAY_INTL_PLAN_AMOUNT ?? '12000')
-const internationalCurrency = process.env.RAZORPAY_INTL_PLAN_CURRENCY ?? 'USD'
-const internationalDisplayPrice =
-	process.env.RAZORPAY_INTL_DISPLAY_PRICE ?? '$120'
-
-const indiaAmount = Number(process.env.RAZORPAY_INDIA_PLAN_AMOUNT ?? '1106400')
-const indiaCurrency = process.env.RAZORPAY_INDIA_PLAN_CURRENCY ?? 'INR'
-const indiaDisplayPrice = process.env.RAZORPAY_INDIA_DISPLAY_PRICE ?? '₹11,064'
+const PLAN_AMOUNT = 12000
+const PLAN_CURRENCY = 'USD'
+const PLAN_DISPLAY_PRICE = '$120'
 
 export const razorpayPlan = {
+	id: 'vedsecure-core-monthly',
 	name: PLAN_NAME,
 	description: PLAN_DESCRIPTION,
 	intervalLabel: '/month',
@@ -49,50 +48,23 @@ export const getRazorpayCredentials = () => {
 	return { keyId, keySecret }
 }
 
-export const resolveBillingMarket = (countryCode?: string | null): BillingMarket => {
+export const resolveBillingMarket = (
+	countryCode?: string | null
+): BillingMarket => {
 	const normalizedCountry = (countryCode ?? '').trim().toUpperCase()
-
-	if (normalizedCountry === 'IN') {
-		return {
-			code: 'IN',
-			label: 'India',
-			countryCode: 'IN',
-			amount: indiaAmount,
-			currency: indiaCurrency,
-			displayPrice: indiaDisplayPrice,
-			intervalLabel: razorpayPlan.intervalLabel,
-			methodSummary: 'UPI, netbanking, wallets, and cards',
-			checkoutDisplay: {
-				sequence: ['upi', 'netbanking', 'wallet', 'card'],
-				preferences: {
-					show_default_blocks: true,
-				},
-			},
-		}
-	}
+	const isIndia = normalizedCountry === 'IN'
 
 	return {
-		code: 'GLOBAL',
-		label: 'International',
-		countryCode: normalizedCountry || 'GLOBAL',
-		amount: internationalAmount,
-		currency: internationalCurrency,
-		displayPrice: internationalDisplayPrice,
+		code: isIndia ? 'IN' : 'GLOBAL',
+		label: isIndia ? 'India' : 'International',
+		countryCode: normalizedCountry || (isIndia ? 'IN' : 'GLOBAL'),
+		amount: PLAN_AMOUNT,
+		currency: PLAN_CURRENCY,
+		displayPrice: PLAN_DISPLAY_PRICE,
 		intervalLabel: razorpayPlan.intervalLabel,
-		methodSummary: 'International cards',
-		checkoutDisplay: {
-			sequence: ['card'],
-			hide: [
-				{ method: 'upi' },
-				{ method: 'netbanking' },
-				{ method: 'wallet' },
-				{ method: 'emi' },
-				{ method: 'paylater' },
-			],
-			preferences: {
-				show_default_blocks: false,
-			},
-		},
+		methodSummary: isIndia
+			? 'cards, UPI, netbanking, and wallets'
+			: 'cards, UPI, netbanking, and wallets where available',
 	}
 }
 
@@ -101,3 +73,43 @@ export const getCountryCodeFromHeaders = (headers: Headers) =>
 	headers.get('cf-ipcountry') ??
 	headers.get('x-country-code') ??
 	null
+
+export const normalizePaymentMethod = (
+	paymentMethod?: string | null
+): PaymentMethod => {
+	if (
+		paymentMethod === 'card' ||
+		paymentMethod === 'upi' ||
+		paymentMethod === 'netbanking' ||
+		paymentMethod === 'wallet'
+	) {
+		return paymentMethod
+	}
+
+	return 'all'
+}
+
+export const resolveCheckoutDisplay = (
+	paymentMethod: PaymentMethod
+): RazorpayCheckoutDisplay => {
+	if (paymentMethod === 'all') {
+		return {
+			sequence: ['card', 'upi', 'netbanking', 'wallet'],
+			preferences: {
+				show_default_blocks: true,
+			},
+		}
+	}
+
+	const methods: PaymentMethod[] = ['card', 'upi', 'netbanking', 'wallet']
+
+	return {
+		sequence: [paymentMethod],
+		hide: methods
+			.filter((method) => method !== paymentMethod)
+			.map((method) => ({ method })),
+		preferences: {
+			show_default_blocks: false,
+		},
+	}
+}

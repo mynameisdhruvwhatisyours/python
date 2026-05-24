@@ -34,3 +34,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Checkout Configuration
+
+The app uses only these Vercel environment variables:
+
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `RAZORPAY_KEY_ID`
+- `RAZORPAY_KEY_SECRET`
+
+The plan price is fixed at `$120 USD`. Razorpay Checkout supports cards, UPI, netbanking, and wallets, selectable from the pricing card before payment.
+
+Razorpay webhook endpoint:
+
+```txt
+https://YOUR_DOMAIN/api/razorpay/webhook
+```
+
+Set the Razorpay webhook secret in the Razorpay dashboard to the same value as `RAZORPAY_KEY_SECRET`.

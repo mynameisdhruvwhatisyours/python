@@ -21,18 +21,18 @@ const Footer: FC = () => {
 					</Link>
 
 					<div className={styles.social__icons}>
-						<Link href='#'>
+						<Link href='https://x.com' target='_blank' rel='noreferrer'>
 							<FaXTwitter />
 						</Link>
-						<Link href='#'>
+						<Link href='mailto:support@vedsecure.com?subject=GitHub'>
 							<FaGithub />
 						</Link>
 
-						<Link href='#'>
+						<Link href='mailto:support@vedsecure.com?subject=Slack'>
 							<FaSlack />
 						</Link>
 
-						<Link href='#'>
+						<Link href='https://youtube.com' target='_blank' rel='noreferrer'>
 							<FaYoutube />
 						</Link>
 					</div>

@@ -3,7 +3,9 @@ import { randomBytes } from 'node:crypto'
 import {
 	getCountryCodeFromHeaders,
 	getRazorpayCredentials,
+	normalizePaymentMethod,
 	razorpayPlan,
+	resolveCheckoutDisplay,
 	resolveBillingMarket,
 } from '@/lib/razorpay'
 
@@ -11,12 +13,21 @@ export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
 	try {
+		const body = (await request.json().catch(() => ({}))) as {
+			clerkUserId?: string
+			email?: string
+			name?: string
+			countryCode?: string
+			paymentMethod?: string
+		}
 		const { keyId, keySecret } = getRazorpayCredentials()
 		const authToken = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
 		const receipt = `ved-${Date.now()}-${randomBytes(4).toString('hex')}`
 		const billingMarket = resolveBillingMarket(
-			getCountryCodeFromHeaders(request.headers)
+			body.countryCode ?? getCountryCodeFromHeaders(request.headers)
 		)
+		const paymentMethod = normalizePaymentMethod(body.paymentMethod)
+		const checkoutDisplay = resolveCheckoutDisplay(paymentMethod)
 
 		const response = await fetch('https://api.razorpay.com/v1/orders', {
 			method: 'POST',
@@ -30,8 +41,16 @@ export async function POST(request: Request) {
 				receipt,
 				notes: {
 					product: razorpayPlan.name,
+					productId: razorpayPlan.id,
+					planId: razorpayPlan.id,
 					billing_cycle: 'monthly',
 					market: billingMarket.label,
+					region: billingMarket.countryCode,
+					currency: billingMarket.currency,
+					paymentMethod,
+					clerkUserId: body.clerkUserId ?? '',
+					email: body.email ?? '',
+					name: body.name ?? '',
 				},
 			}),
 			cache: 'no-store',
@@ -80,7 +99,17 @@ export async function POST(request: Request) {
 			displayPrice: billingMarket.displayPrice,
 			methodSummary: billingMarket.methodSummary,
 			marketLabel: billingMarket.label,
-			checkoutDisplay: billingMarket.checkoutDisplay,
+			checkoutDisplay,
+			notes: {
+				productId: razorpayPlan.id,
+				planId: razorpayPlan.id,
+				region: billingMarket.countryCode,
+				currency: billingMarket.currency,
+				paymentMethod,
+				clerkUserId: body.clerkUserId ?? '',
+				email: body.email ?? '',
+				name: body.name ?? '',
+			},
 			receipt,
 		})
 	} catch (error) {

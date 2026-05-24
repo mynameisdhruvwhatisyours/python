@@ -55,11 +55,10 @@ const Pricing: FC = () => {
 								</span>
 							</div>
 							<p className='mt-3 text-sm leading-6 text-[var(--color-text-tertiary)]'>
-								Visitors from {billingMarket.label} will be billed in{' '}
-								{billingMarket.currency}, and checkout is tuned for{' '}
-								{billingMarket.methodSummary.toLowerCase()}. This behavior works
-								automatically by region, with optional env overrides only if
-								you want custom pricing later.
+								Visitors from {billingMarket.label} will be billed in USD, and
+								checkout supports {billingMarket.methodSummary.toLowerCase()}.
+								The final payment method can be selected before opening
+								Razorpay.
 							</p>
 
 							<div className='mt-6 space-y-3'>

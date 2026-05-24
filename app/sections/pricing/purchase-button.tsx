@@ -1,8 +1,10 @@
 'use client'
 
+import { useUser } from '@clerk/nextjs'
 import { useState } from 'react'
 
 type PurchaseState = 'idle' | 'loading' | 'success' | 'error'
+type PaymentMethod = 'all' | 'card' | 'upi' | 'netbanking' | 'wallet'
 
 type CreateOrderResponse = {
 	keyId: string
@@ -24,6 +26,7 @@ type CreateOrderResponse = {
 			show_default_blocks?: boolean
 		}
 	}
+	notes?: Record<string, string>
 }
 
 type CreateOrderError = {
@@ -53,7 +56,9 @@ const loadCheckoutScript = () =>
 	})
 
 const PurchaseButton = () => {
+	const { user } = useUser()
 	const [state, setState] = useState<PurchaseState>('idle')
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('all')
 	const [message, setMessage] = useState(
 		'Secure checkout powered by Razorpay. You can connect provisioning after payment verification.'
 	)
@@ -74,6 +79,12 @@ const PurchaseButton = () => {
 			const orderResponse = await fetch('/api/razorpay/create-order', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					clerkUserId: user?.id ?? '',
+					email: user?.primaryEmailAddress?.emailAddress ?? '',
+					name: user?.fullName ?? user?.username ?? '',
+					paymentMethod,
+				}),
 			})
 
 			const orderData = (await orderResponse.json()) as
@@ -96,6 +107,12 @@ const PurchaseButton = () => {
 				currency: orderData.currency,
 				name: orderData.name,
 				description: orderData.description,
+				prefill: {
+					name: user?.fullName ?? user?.username ?? '',
+					email: user?.primaryEmailAddress?.emailAddress ?? '',
+				},
+				notes: orderData.notes,
+				method: getMethodOptions(paymentMethod),
 				config: {
 					display: orderData.checkoutDisplay,
 				},
@@ -153,6 +170,21 @@ const PurchaseButton = () => {
 
 	return (
 		<div className='mt-6'>
+			<label className='mb-4 block text-sm text-[var(--color-text-tertiary)]'>
+				<span className='mb-2 block text-white'>Payment method</span>
+				<select
+					value={paymentMethod}
+					onChange={(event) =>
+						setPaymentMethod(event.target.value as PaymentMethod)
+					}
+					className='h-11 w-full rounded-[12px] border border-white/10 bg-[#0f1113] px-3 text-sm text-white outline-none transition focus:border-white/30'>
+					<option value='all'>All available methods</option>
+					<option value='card'>Cards</option>
+					<option value='upi'>UPI</option>
+					<option value='netbanking'>Netbanking</option>
+					<option value='wallet'>Wallets</option>
+				</select>
+			</label>
 			<button
 				type='button'
 				onClick={handlePurchase}
@@ -175,3 +207,16 @@ const PurchaseButton = () => {
 }
 
 export default PurchaseButton
+
+function getMethodOptions(paymentMethod: PaymentMethod) {
+	if (paymentMethod === 'all') {
+		return undefined
+	}
+
+	return {
+		card: paymentMethod === 'card',
+		upi: paymentMethod === 'upi',
+		netbanking: paymentMethod === 'netbanking',
+		wallet: paymentMethod === 'wallet',
+	}
+}
