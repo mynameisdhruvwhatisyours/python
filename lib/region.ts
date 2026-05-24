@@ -1,6 +1,9 @@
 export type UserRegion = {
 	code: string
 	label: string
+	amount: number
+	currency: string
+	displayPrice: string
 	isFallback: boolean
 	features: {
 		razorpay: boolean
@@ -8,14 +11,50 @@ export type UserRegion = {
 	}
 }
 
-const regionLabels: Record<string, string> = {
-	IN: 'India',
-	US: 'United States',
-	GB: 'United Kingdom',
-	CA: 'Canada',
-	AU: 'Australia',
-	GLOBAL: 'International',
-}
+export const checkoutRegions = [
+	{
+		code: 'IN',
+		label: 'India',
+		amount: 999900,
+		currency: 'INR',
+		displayPrice: 'INR 9,999',
+	},
+	{
+		code: 'US',
+		label: 'United States',
+		amount: 12000,
+		currency: 'USD',
+		displayPrice: '$120',
+	},
+	{
+		code: 'GB',
+		label: 'United Kingdom',
+		amount: 9500,
+		currency: 'GBP',
+		displayPrice: 'GBP 95',
+	},
+	{
+		code: 'CA',
+		label: 'Canada',
+		amount: 16500,
+		currency: 'CAD',
+		displayPrice: 'CA$165',
+	},
+	{
+		code: 'AU',
+		label: 'Australia',
+		amount: 18000,
+		currency: 'AUD',
+		displayPrice: 'A$180',
+	},
+	{
+		code: 'GLOBAL',
+		label: 'Other / International',
+		amount: 12000,
+		currency: 'USD',
+		displayPrice: '$120',
+	},
+] as const
 
 export function getUserRegion(input?: {
 	countryCode?: string | null
@@ -30,10 +69,14 @@ export function getUserRegion(input?: {
 	const code = normalizeRegionCode(
 		input?.userCountryCode ?? input?.countryCode ?? headerCountry
 	)
+	const region = getRegionConfig(code)
 
 	return {
 		code,
-		label: regionLabels[code] ?? regionLabels.GLOBAL,
+		label: region.label,
+		amount: region.amount,
+		currency: region.currency,
+		displayPrice: region.displayPrice,
 		isFallback: code === 'GLOBAL',
 		features: {
 			razorpay: true,
@@ -49,5 +92,12 @@ function normalizeRegionCode(countryCode?: string | null) {
 		return 'GLOBAL'
 	}
 
-	return regionLabels[code] ? code : 'GLOBAL'
+	return checkoutRegions.some((region) => region.code === code) ? code : 'GLOBAL'
+}
+
+function getRegionConfig(code: string) {
+	return (
+		checkoutRegions.find((region) => region.code === code) ??
+		checkoutRegions[checkoutRegions.length - 1]
+	)
 }

@@ -1,11 +1,6 @@
 import { type FC } from 'react'
-import { headers } from 'next/headers'
 import LayoutWrapper from '@/components/layout-wrapper'
-import {
-	getCountryCodeFromHeaders,
-	razorpayPlan,
-	resolveBillingMarket,
-} from '@/lib/razorpay'
+import { razorpayPlan } from '@/lib/razorpay'
 import PurchaseButton from './purchase-button'
 
 const pricingPoints = [
@@ -16,10 +11,6 @@ const pricingPoints = [
 ]
 
 const Pricing: FC = () => {
-	const billingMarket = resolveBillingMarket(
-		getCountryCodeFromHeaders(headers())
-	)
-
 	return (
 		<section
 			id='pricing'
@@ -46,18 +37,9 @@ const Pricing: FC = () => {
 							<p className='text-sm uppercase tracking-[0.22em] text-[#7f838a]'>
 								{razorpayPlan.name}
 							</p>
-							<div className='mt-4 flex items-end gap-2'>
-								<span className='text-[56px] font-medium leading-none tracking-[-0.05em]'>
-									{billingMarket.displayPrice}
-								</span>
-								<span className='pb-2 text-sm text-[var(--color-text-tertiary)]'>
-									{billingMarket.intervalLabel}
-								</span>
-							</div>
 							<p className='mt-3 text-sm leading-6 text-[var(--color-text-tertiary)]'>
-								Visitors from {billingMarket.label} will be billed in USD, and
-								Razorpay will show the supported payment methods for the
-								selected region.
+								Select your region below to see the local price. Razorpay will
+								then show the payment methods supported for that region.
 							</p>
 
 							<div className='mt-6 space-y-3'>

@@ -26,9 +26,6 @@ export type RazorpayCheckoutDisplay = {
 const PLAN_NAME = 'vedSecure Core'
 const PLAN_DESCRIPTION =
 	'Monthly access to vedSecure endpoint protection and response controls.'
-const PLAN_AMOUNT = 12000
-const PLAN_CURRENCY = 'USD'
-const PLAN_DISPLAY_PRICE = '$120'
 
 export const razorpayPlan = {
 	id: 'vedsecure-core-monthly',
@@ -58,13 +55,13 @@ export const resolveBillingMarket = (
 		code: isIndia ? 'IN' : 'GLOBAL',
 		label: region.label,
 		countryCode: region.code,
-		amount: PLAN_AMOUNT,
-		currency: PLAN_CURRENCY,
-		displayPrice: PLAN_DISPLAY_PRICE,
+		amount: region.amount,
+		currency: region.currency,
+		displayPrice: region.displayPrice,
 		intervalLabel: razorpayPlan.intervalLabel,
 		methodSummary: isIndia
 			? 'cards, UPI, netbanking, and wallets'
-			: 'cards, UPI, netbanking, and wallets where available',
+			: 'international card payments',
 	}
 }
 
@@ -76,14 +73,9 @@ export const getCountryCodeFromHeaders = (headers: Headers) =>
 
 export const resolveCheckoutDisplay = (
 	billingMarket: BillingMarket
-): RazorpayCheckoutDisplay => {
+): RazorpayCheckoutDisplay | undefined => {
 	if (billingMarket.code === 'IN') {
-		return {
-			sequence: ['upi', 'netbanking', 'wallet', 'card'],
-			preferences: {
-				show_default_blocks: true,
-			},
-		}
+		return undefined
 	}
 
 	return {

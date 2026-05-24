@@ -1,7 +1,9 @@
 'use client'
 
 import { useUser } from '@clerk/nextjs'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { isClerkConfigured } from '@/lib/env'
+import { checkoutRegions } from '@/lib/region'
 
 type PurchaseState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -33,21 +35,15 @@ type CreateOrderError = {
 	details?: string
 }
 
-type CountryOption = {
-	code: string
-	label: string
+type CheckoutUser = {
+	primaryEmailAddress?: {
+		emailAddress?: string
+	} | null
+	fullName?: string | null
+	username?: string | null
 }
 
 const CHECKOUT_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js'
-
-const countryOptions: CountryOption[] = [
-	{ code: 'IN', label: 'India' },
-	{ code: 'US', label: 'United States' },
-	{ code: 'GB', label: 'United Kingdom' },
-	{ code: 'CA', label: 'Canada' },
-	{ code: 'AU', label: 'Australia' },
-	{ code: 'GLOBAL', label: 'Other / International' },
-]
 
 const loadCheckoutScript = () =>
 	new Promise<boolean>((resolve) => {
@@ -68,8 +64,7 @@ const loadCheckoutScript = () =>
 		document.body.appendChild(script)
 	})
 
-const PurchaseButton = () => {
-	const { user } = useUser()
+const PurchaseForm = ({ user }: { user?: CheckoutUser | null }) => {
 	const defaultEmail = user?.primaryEmailAddress?.emailAddress ?? ''
 	const [state, setState] = useState<PurchaseState>('idle')
 	const [countryCode, setCountryCode] = useState('IN')
@@ -77,12 +72,18 @@ const PurchaseButton = () => {
 	const [message, setMessage] = useState(
 		'Select your region and enter the email where your license keys should be sent.'
 	)
-	const selectedCountry = useMemo(
+	const selectedRegion = useMemo(
 		() =>
-			countryOptions.find((country) => country.code === countryCode) ??
-			countryOptions[0],
+			checkoutRegions.find((country) => country.code === countryCode) ??
+			checkoutRegions[0],
 		[countryCode]
 	)
+
+	useEffect(() => {
+		if (defaultEmail && !email) {
+			setEmail(defaultEmail)
+		}
+	}, [defaultEmail, email])
 
 	const handlePurchase = async () => {
 		const checkoutEmail = email.trim() || defaultEmail
@@ -140,9 +141,9 @@ const PurchaseButton = () => {
 					email: checkoutEmail,
 				},
 				notes: orderData.notes,
-				config: {
-					display: orderData.checkoutDisplay,
-				},
+				...(orderData.checkoutDisplay
+					? { config: { display: orderData.checkoutDisplay } }
+					: {}),
 				theme: { color: '#f4f4f5' },
 				handler: async (response) => {
 					const verifyResponse = await fetch('/api/razorpay/verify', {
@@ -183,7 +184,7 @@ const PurchaseButton = () => {
 			razorpay.open()
 			setState('idle')
 			setMessage(
-				`Checkout opened for ${orderData.marketLabel}. Razorpay will show supported methods for ${selectedCountry.label}.`
+				`Checkout opened for ${orderData.marketLabel}. Razorpay will show supported methods for ${selectedRegion.label}.`
 			)
 		} catch (error) {
 			setState('error')
@@ -197,13 +198,32 @@ const PurchaseButton = () => {
 
 	return (
 		<div className='mt-6 space-y-4'>
+			<div className='rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3'>
+				<p className='text-xs uppercase tracking-[0.22em] text-[#7f838a]'>
+					Selected price
+				</p>
+				<div className='mt-2 flex items-end gap-2'>
+					<span className='text-3xl font-medium leading-none tracking-[-0.04em] text-white'>
+						{selectedRegion.displayPrice}
+					</span>
+					<span className='text-sm text-[var(--color-text-tertiary)]'>
+						/month
+					</span>
+				</div>
+				<p className='mt-2 text-sm leading-6 text-[var(--color-text-tertiary)]'>
+					{selectedRegion.code === 'IN'
+						? 'Indian checkout will use INR and show local Razorpay methods supported by your account.'
+						: 'International checkout will use the regional currency and show supported Razorpay methods.'}
+				</p>
+			</div>
+
 			<label className='block text-sm text-[var(--color-text-tertiary)]'>
 				<span className='mb-2 block text-white'>Region</span>
 				<select
 					value={countryCode}
 					onChange={(event) => setCountryCode(event.target.value)}
 					className='h-11 w-full rounded-[12px] border border-white/10 bg-[#0f1113] px-3 text-sm text-white outline-none transition focus:border-white/30'>
-					{countryOptions.map((country) => (
+					{checkoutRegions.map((country) => (
 						<option key={country.code} value={country.code}>
 							{country.label}
 						</option>
@@ -243,5 +263,14 @@ const PurchaseButton = () => {
 		</div>
 	)
 }
+
+const ClerkPurchaseButton = () => {
+	const { user } = useUser()
+
+	return <PurchaseForm user={user} />
+}
+
+const PurchaseButton = () =>
+	isClerkConfigured ? <ClerkPurchaseButton /> : <PurchaseForm />
 
 export default PurchaseButton
