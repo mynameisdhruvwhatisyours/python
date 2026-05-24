@@ -1,4 +1,5 @@
 import { SignUp } from '@clerk/nextjs'
+import { isClerkConfigured } from '@/lib/env'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,12 +21,18 @@ export default function SignUpPage() {
 				</div>
 
 				<div className='flex justify-center lg:min-w-[420px]'>
-					<SignUp
-						path='/sign-up'
-						routing='path'
-						signInUrl='/sign-in'
-						forceRedirectUrl='/dashboard'
-					/>
+					{isClerkConfigured ? (
+						<SignUp
+							path='/sign-up'
+							routing='path'
+							signInUrl='/sign-in'
+							forceRedirectUrl='/dashboard'
+						/>
+					) : (
+						<p className='rounded-[24px] border border-white/10 bg-white/[0.03] p-6 text-sm leading-6 text-[#a0a4ab]'>
+							Clerk is not configured in this environment.
+						</p>
+					)}
 				</div>
 			</div>
 		</div>

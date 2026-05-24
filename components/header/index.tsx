@@ -2,7 +2,7 @@ import { type FC } from 'react'
 import Logo from '@/assets/logo.svg'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Menu } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 import AuthActions from './auth-actions'
 import styles from './styles.module.css'
 
@@ -21,55 +21,36 @@ const Header: FC = () => {
 								</Link>
 							</li>
 
-							<li className={cn(styles.hide__mobile, styles.header__trigger)}>
+							<li className={cn(styles.hide__mobile, styles.header__item)}>
 								<Link className={styles.header__link} href='/#protection'>
-									{' '}
-									Protection{' '}
+									Protection
 								</Link>
 							</li>
 
-							<li className={cn(styles.hide__laptop, styles.header__item)}>
+							<li className={cn(styles.hide__mobile, styles.header__item)}>
 								<Link className={styles.header__link} href='/#threats'>
-									{' '}
-									Threats{' '}
-								</Link>
-							</li>
-
-							<li className={cn(styles.hide__laptop, styles.header__item)}>
-								<Link className={styles.header__link} href='/#clients'>
-									{' '}
-									Clients{' '}
-								</Link>
-							</li>
-
-							<li className={cn(styles.hide__tablet, styles.header__item)}>
-								<Link className={styles.header__link} href='/#updates'>
-									{' '}
-									Updates{' '}
+									Threats
 								</Link>
 							</li>
 
 							<li className={cn(styles.hide__mobile, styles.header__item)}>
 								<Link className={styles.header__link} href='/#pricing'>
-									{' '}
-									Pricing{' '}
+									Pricing
 								</Link>
 							</li>
 
-							<li className={cn(styles.hide__mobile, styles.header__item)}>
-								<Link className={styles.header__link} href='/docs'>
-									{' '}
-									Documentation{' '}
-								</Link>
-							</li>
-
-							<li className={cn(styles.hide__tablet, styles.header__item)}>
-								<Link
-									className={styles.header__link}
-									href='mailto:sales@vedsecure.com'>
-									{' '}
-									Contact{' '}
-								</Link>
+							<li className={cn(styles.header__item, styles.header__overflow)}>
+								<details className={styles.overflow__details}>
+									<summary aria-label='More navigation'>
+										<MoreHorizontal size={16} />
+									</summary>
+									<div className={styles.overflow__menu}>
+										<Link href='/#clients'>Clients</Link>
+										<Link href='/#updates'>Updates</Link>
+										<Link href='/docs'>Documentation</Link>
+										<Link href='mailto:sales@vedsecure.com'>Contact</Link>
+									</div>
+								</details>
 							</li>
 
 							<AuthActions />
@@ -81,7 +62,7 @@ const Header: FC = () => {
 									styles.header__menu,
 								)}>
 								<Link href='/#pricing' aria-label='Open pricing'>
-									<Menu />
+									<MoreHorizontal size={18} />
 								</Link>
 							</li>
 						</ul>

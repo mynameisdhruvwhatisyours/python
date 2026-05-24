@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { currentUser } from '@clerk/nextjs/server'
 import { randomBytes } from 'node:crypto'
 import {
 	getCountryCodeFromHeaders,
@@ -13,13 +14,16 @@ export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
 	try {
+		const user = await currentUser()
 		const body = (await request.json().catch(() => ({}))) as {
-			clerkUserId?: string
 			email?: string
 			name?: string
 			countryCode?: string
 			paymentMethod?: string
 		}
+		const email = user?.primaryEmailAddress?.emailAddress ?? body.email ?? ''
+		const name = user?.fullName ?? user?.username ?? body.name ?? ''
+		const clerkUserId = user?.id ?? ''
 		const { keyId, keySecret } = getRazorpayCredentials()
 		const authToken = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
 		const receipt = `ved-${Date.now()}-${randomBytes(4).toString('hex')}`
@@ -48,9 +52,9 @@ export async function POST(request: Request) {
 					region: billingMarket.countryCode,
 					currency: billingMarket.currency,
 					paymentMethod,
-					clerkUserId: body.clerkUserId ?? '',
-					email: body.email ?? '',
-					name: body.name ?? '',
+					clerkUserId,
+					email,
+					name,
 				},
 			}),
 			cache: 'no-store',
@@ -106,9 +110,9 @@ export async function POST(request: Request) {
 				region: billingMarket.countryCode,
 				currency: billingMarket.currency,
 				paymentMethod,
-				clerkUserId: body.clerkUserId ?? '',
-				email: body.email ?? '',
-				name: body.name ?? '',
+				clerkUserId,
+				email,
+				name,
 			},
 			receipt,
 		})

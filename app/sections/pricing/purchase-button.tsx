@@ -80,7 +80,6 @@ const PurchaseButton = () => {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					clerkUserId: user?.id ?? '',
 					email: user?.primaryEmailAddress?.emailAddress ?? '',
 					name: user?.fullName ?? user?.username ?? '',
 					paymentMethod,

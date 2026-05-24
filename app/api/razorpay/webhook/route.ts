@@ -57,8 +57,6 @@ export async function POST(request: Request) {
 				: new Date().toISOString(),
 		}
 
-		console.info('Verified Razorpay payment webhook', automationPayload)
-
 		return NextResponse.json({ ok: true, payment: automationPayload })
 	} catch (error) {
 		return NextResponse.json(

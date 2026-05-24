@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import { isClerkConfigured } from '@/lib/env'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -17,16 +18,20 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode
 }>) {
+	const content = (
+		<>
+			<Header />
+			{children}
+			<Footer />
+			<Analytics />
+			<SpeedInsights />
+		</>
+	)
+
 	return (
 		<html lang='en'>
 			<body>
-				<ClerkProvider>
-					<Header />
-					{children}
-					<Footer />
-					<Analytics />
-					<SpeedInsights />
-				</ClerkProvider>
+				{isClerkConfigured ? <ClerkProvider>{content}</ClerkProvider> : content}
 			</body>
 		</html>
 	)

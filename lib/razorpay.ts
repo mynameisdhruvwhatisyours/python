@@ -1,3 +1,5 @@
+import { getUserRegion } from './region'
+
 export type PaymentMethod = 'all' | 'card' | 'upi' | 'netbanking' | 'wallet'
 
 export type BillingMarket = {
@@ -51,13 +53,13 @@ export const getRazorpayCredentials = () => {
 export const resolveBillingMarket = (
 	countryCode?: string | null
 ): BillingMarket => {
-	const normalizedCountry = (countryCode ?? '').trim().toUpperCase()
-	const isIndia = normalizedCountry === 'IN'
+	const region = getUserRegion({ countryCode })
+	const isIndia = region.code === 'IN'
 
 	return {
 		code: isIndia ? 'IN' : 'GLOBAL',
-		label: isIndia ? 'India' : 'International',
-		countryCode: normalizedCountry || (isIndia ? 'IN' : 'GLOBAL'),
+		label: region.label,
+		countryCode: region.code,
 		amount: PLAN_AMOUNT,
 		currency: PLAN_CURRENCY,
 		displayPrice: PLAN_DISPLAY_PRICE,

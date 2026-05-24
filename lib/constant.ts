@@ -1,4 +1,3 @@
-import { type ReactNode } from 'react'
 import { type UserCardProps } from '@/app/sections/issue-tracking/components/user-card'
 import { CarouselCardProps } from '@/app/sections/modern-product-teams/components/carousel-card'
 
@@ -18,32 +17,32 @@ export const footerSections: FooterSection[] = [
 		items: [
 			{
 				id: 'footer-section-11',
-				link: '#',
+				link: '/#integrations',
 				item: 'Integrations',
 			},
 			{
 				id: 'footer-section-12',
-				link: '#',
+				link: '/#pricing',
 				item: 'Pricing',
 			},
 			{
 				id: 'footer-section-13',
-				link: '#',
+				link: '/#updates',
 				item: 'Changelog',
 			},
 			{
 				id: 'footer-section-14',
-				link: '#',
+				link: '/docs',
 				item: 'Docs',
 			},
 			{
 				id: 'footer-section-15',
-				link: '#',
+				link: '/#shield',
 				item: 'vedSecure Shield',
 			},
 			{
 				id: 'footer-section-16',
-				link: '#',
+				link: '/#pricing',
 				item: 'Download',
 			},
 		],
@@ -53,27 +52,27 @@ export const footerSections: FooterSection[] = [
 		items: [
 			{
 				id: 'footer-section-21',
-				link: '#',
+				link: '/#foundation',
 				item: 'About us',
 			},
 			{
 				id: 'footer-section-22',
-				link: '#',
+				link: '/#updates',
 				item: 'Blog',
 			},
 			{
 				id: 'footer-section-23',
-				link: '#',
+				link: 'mailto:careers@vedsecure.com',
 				item: 'Careers',
 			},
 			{
 				id: 'footer-section-24',
-				link: '#',
+				link: '/#clients',
 				item: 'Clients',
 			},
 			{
 				id: 'footer-section-25',
-				link: '#',
+				link: '/#foundation',
 				item: 'Brand',
 			},
 		],
@@ -83,37 +82,37 @@ export const footerSections: FooterSection[] = [
 		items: [
 			{
 				id: 'footer-section-31',
-				link: '#',
+				link: 'mailto:partners@vedsecure.com',
 				item: 'Partner Program',
 			},
 			{
 				id: 'footer-section-32',
-				link: '#',
+				link: '/#clients',
 				item: 'Community',
 			},
 			{
 				id: 'footer-section-33',
-				link: '#',
+				link: 'mailto:sales@vedsecure.com',
 				item: 'Contact',
 			},
 			{
 				id: 'footer-section-34',
-				link: '#',
+				link: 'mailto:legal@vedsecure.com?subject=DPA',
 				item: 'DPA',
 			},
 			{
 				id: 'footer-section-35',
-				link: '#',
+				link: 'mailto:legal@vedsecure.com?subject=Privacy%20Policy',
 				item: 'Privacy Policy',
 			},
 			{
 				id: 'footer-section-36',
-				link: '#',
+				link: 'mailto:legal@vedsecure.com?subject=Terms%20of%20service',
 				item: 'Terms of service',
 			},
 			{
 				id: 'footer-section-37',
-				link: '#',
+				link: 'mailto:security@vedsecure.com?subject=Vulnerability%20report',
 				item: 'Report a vulnerability',
 			},
 		],
@@ -123,22 +122,22 @@ export const footerSections: FooterSection[] = [
 		items: [
 			{
 				id: 'footer-section-41',
-				link: '#',
+				link: '/docs',
 				item: 'API',
 			},
 			{
 				id: 'footer-section-42',
-				link: '#',
+				link: 'mailto:support@vedsecure.com?subject=Status',
 				item: 'Status',
 			},
 			{
 				id: 'footer-section-43',
-				link: '#',
+				link: 'mailto:support@vedsecure.com?subject=GitHub',
 				item: 'GitHub',
 			},
 			{
 				id: 'footer-section-44',
-				link: '#',
+				link: '/docs/getting-started',
 				item: 'README',
 			},
 		],

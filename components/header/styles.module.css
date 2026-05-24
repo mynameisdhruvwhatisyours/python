@@ -19,7 +19,7 @@
 }
 
 .header .header__wrapper {
-	@apply block select-none isolate overflow-hidden fixed px-3 max-w-[var(--header-max-width)] z-[var(--layer-header)] bg-[var(hsla(0,0%,4%,.2))] backdrop-blur-xl backdrop-saturate-[140%] rounded-[var(--header-radius)];
+	@apply block select-none isolate fixed px-3 max-w-[var(--header-max-width)] z-[var(--layer-header)] bg-[rgba(4,4,4,0.72)] backdrop-blur-xl backdrop-saturate-[140%] rounded-[var(--header-radius)];
 	--clip: inset(
 		0 0 calc(100% - var(--header-height) + var(--header-top)) 0 round
 			var(--header-radius)
@@ -50,7 +50,7 @@
 }
 
 .header .header__root .header__list {
-	@apply flex gap-4 sm:gap-0 justify-start sm:justify-between items-stretch;
+	@apply flex gap-2 justify-start sm:justify-between items-stretch;
 	min-height: calc(var(--header-height) - var(--header-top));
 }
 
@@ -73,7 +73,7 @@
 }
 
 .header .header__root .header__list .header__link {
-	@apply px-2 md:px-3 lg:px-4 flex justify-center items-center h-full;
+	@apply px-3 flex justify-center items-center h-full;
 }
 
 .header .header__root .header__list .header__button {
@@ -81,11 +81,11 @@
 }
 
 .header .button__login {
-	@apply bg-[var(--color-bg-quaternary)] text-[var(--color-text-primary)] shadow-[var(--shadow-stack-low)] font-medium text-[13px] h-6 gap-1 px-3 rounded-lg hover:brightness-125 transition-colors;
+	@apply bg-[var(--color-bg-quaternary)] text-[var(--color-text-primary)] shadow-[var(--shadow-stack-low)] font-medium text-[13px] h-8 gap-1 px-3 rounded-lg hover:brightness-125 transition-colors;
 }
 
 .header .button__signup {
-	@apply !text-[var(--color-bg-primary)] bg-[#e6e6e6] shadow-[var(--shadow-stack-low)] font-medium text-[13px] h-6 gap-1 px-3 rounded-lg hover:bg-[var(--color-text-primary)] transition-colors;
+	@apply !text-[var(--color-bg-primary)] bg-[#e6e6e6] shadow-[var(--shadow-stack-low)] font-medium text-[13px] h-8 gap-1 px-3 rounded-lg hover:bg-[var(--color-text-primary)] transition-colors;
 }
 
 .header .header__root .header__list .header__login {
@@ -114,4 +114,36 @@
 
 .header__menu {
 	@apply sm:!hidden;
+}
+
+.header__menu a {
+	@apply my-2 flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--color-bg-quaternary)] text-[var(--color-text-primary)] shadow-[var(--shadow-stack-low)];
+}
+
+.header__overflow {
+	@apply relative hidden sm:flex items-center;
+}
+
+.overflow__details {
+	@apply relative flex items-center;
+}
+
+.overflow__details summary {
+	@apply flex h-8 w-8 cursor-pointer list-none items-center justify-center rounded-lg bg-[var(--color-bg-quaternary)] text-[var(--color-text-primary)] shadow-[var(--shadow-stack-low)] transition hover:brightness-125;
+}
+
+.overflow__details summary::-webkit-details-marker {
+	display: none;
+}
+
+.overflow__menu {
+	@apply absolute right-0 top-[calc(100%+8px)] z-[calc(var(--layer-header)+1)] hidden min-w-[180px] flex-col gap-1 rounded-lg border border-[var(--color-border-secondary)] bg-[var(--color-bg-secondary)] p-2 shadow-[var(--shadow-high)];
+}
+
+.overflow__details[open] .overflow__menu {
+	@apply flex;
+}
+
+.overflow__menu a {
+	@apply rounded-md px-3 py-2 text-sm text-[var(--color-text-secondary)] transition hover:bg-[var(--color-bg-quaternary)] hover:text-[var(--color-text-primary)];
 }

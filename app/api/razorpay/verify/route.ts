@@ -41,8 +41,7 @@ export async function POST(request: Request) {
 
 		return NextResponse.json({
 			success: true,
-			message:
-				'Payment verified successfully. You can now connect fulfillment or subscription activation.',
+			message: 'Payment verified successfully.',
 		})
 	} catch (error) {
 		return NextResponse.json(

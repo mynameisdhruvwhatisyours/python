@@ -53,3 +53,5 @@ https://YOUR_DOMAIN/api/razorpay/webhook
 ```
 
 Set the Razorpay webhook secret in the Razorpay dashboard to the same value as `RAZORPAY_KEY_SECRET`.
+
+Make.com email automation needs a Make webhook URL. The current Vercel environment only includes the four variables above, so this codebase does not call Make.com until a webhook URL is available.
