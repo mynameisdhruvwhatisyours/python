@@ -1,3 +1,4 @@
+import { convertPlanPrice } from './currency'
 import { getUserRegion } from './region'
 
 export type BillingMarket = {
@@ -7,6 +8,9 @@ export type BillingMarket = {
 	amount: number
 	currency: string
 	displayPrice: string
+	exchangeRate: number
+	rateSource: 'live' | 'fallback'
+	rateTimestamp: string
 	intervalLabel: string
 	methodSummary: string
 	checkoutDisplay?: RazorpayCheckoutDisplay
@@ -45,19 +49,23 @@ export const getRazorpayCredentials = () => {
 	return { keyId, keySecret }
 }
 
-export const resolveBillingMarket = (
+export const resolveBillingMarket = async (
 	countryCode?: string | null
-): BillingMarket => {
+): Promise<BillingMarket> => {
 	const region = getUserRegion({ countryCode })
 	const isIndia = region.code === 'IN'
+	const convertedPrice = await convertPlanPrice(region.currency)
 
 	return {
 		code: isIndia ? 'IN' : 'GLOBAL',
 		label: region.label,
 		countryCode: region.code,
-		amount: region.amount,
-		currency: region.currency,
-		displayPrice: region.displayPrice,
+		amount: convertedPrice.amount,
+		currency: convertedPrice.currency,
+		displayPrice: convertedPrice.displayPrice,
+		exchangeRate: convertedPrice.exchangeRate,
+		rateSource: convertedPrice.rateSource,
+		rateTimestamp: convertedPrice.rateTimestamp,
 		intervalLabel: razorpayPlan.intervalLabel,
 		methodSummary: isIndia
 			? 'cards, UPI, netbanking, and wallets'

@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 		const { keyId, keySecret } = getRazorpayCredentials()
 		const authToken = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
 		const receipt = `ved-${Date.now()}-${randomBytes(4).toString('hex')}`
-		const billingMarket = resolveBillingMarket(
+		const billingMarket = await resolveBillingMarket(
 			body.countryCode ?? getCountryCodeFromHeaders(request.headers)
 		)
 		const checkoutDisplay = resolveCheckoutDisplay(billingMarket)
@@ -55,6 +55,10 @@ export async function POST(request: Request) {
 					market: billingMarket.label,
 					region: billingMarket.countryCode,
 					currency: billingMarket.currency,
+					basePriceUsd: '120',
+					exchangeRate: String(billingMarket.exchangeRate),
+					rateSource: billingMarket.rateSource,
+					rateTimestamp: billingMarket.rateTimestamp,
 					clerkUserId,
 					email,
 					name,
@@ -106,6 +110,9 @@ export async function POST(request: Request) {
 			displayPrice: billingMarket.displayPrice,
 			methodSummary: billingMarket.methodSummary,
 			marketLabel: billingMarket.label,
+			exchangeRate: billingMarket.exchangeRate,
+			rateSource: billingMarket.rateSource,
+			rateTimestamp: billingMarket.rateTimestamp,
 			checkoutDisplay,
 			notes: {
 				productId: razorpayPlan.id,

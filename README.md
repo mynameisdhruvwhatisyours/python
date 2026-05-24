@@ -44,7 +44,7 @@ The app uses only these Vercel environment variables:
 - `RAZORPAY_KEY_ID`
 - `RAZORPAY_KEY_SECRET`
 
-The plan price is fixed at `$120 USD`. Customers select their region and enter the email address where license keys should be sent. Razorpay Checkout then shows the supported payment methods for that region.
+The plan uses `$120 USD` as the base price. Checkout converts that amount into the selected region's currency at request time, then creates the Razorpay order server-side so the displayed price and charged amount follow current exchange rates.
 
 Razorpay webhook endpoint:
 

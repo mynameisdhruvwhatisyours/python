@@ -17,6 +17,9 @@ type CreateOrderResponse = {
 	displayPrice: string
 	methodSummary: string
 	marketLabel: string
+	exchangeRate: number
+	rateSource: 'live' | 'fallback'
+	rateTimestamp: string
 	checkoutDisplay?: {
 		sequence?: string[]
 		hide?: Array<{
@@ -33,6 +36,18 @@ type CreateOrderResponse = {
 type CreateOrderError = {
 	error?: string
 	details?: string
+}
+
+type PriceQuote = {
+	amount: number
+	currency: string
+	displayPrice: string
+	exchangeRate: number
+	rateSource: 'live' | 'fallback'
+	rateTimestamp: string
+	intervalLabel: string
+	marketLabel: string
+	methodSummary: string
 }
 
 type CheckoutUser = {
@@ -69,6 +84,8 @@ const PurchaseForm = ({ user }: { user?: CheckoutUser | null }) => {
 	const [state, setState] = useState<PurchaseState>('idle')
 	const [countryCode, setCountryCode] = useState('IN')
 	const [email, setEmail] = useState(defaultEmail)
+	const [quote, setQuote] = useState<PriceQuote | null>(null)
+	const [isQuoteLoading, setIsQuoteLoading] = useState(true)
 	const [message, setMessage] = useState(
 		'Select your region and enter the email where your license keys should be sent.'
 	)
@@ -84,6 +101,37 @@ const PurchaseForm = ({ user }: { user?: CheckoutUser | null }) => {
 			setEmail(defaultEmail)
 		}
 	}, [defaultEmail, email])
+
+	useEffect(() => {
+		const controller = new AbortController()
+
+		setIsQuoteLoading(true)
+
+		fetch(`/api/pricing/quote?countryCode=${countryCode}`, {
+			signal: controller.signal,
+		})
+			.then(async (response) => {
+				if (!response.ok) {
+					throw new Error('Unable to load live price.')
+				}
+
+				return (await response.json()) as PriceQuote
+			})
+			.then((priceQuote) => {
+				setQuote(priceQuote)
+				setIsQuoteLoading(false)
+			})
+			.catch((error) => {
+				if (error instanceof DOMException && error.name === 'AbortError') {
+					return
+				}
+
+				setQuote(null)
+				setIsQuoteLoading(false)
+			})
+
+		return () => controller.abort()
+	}, [countryCode])
 
 	const handlePurchase = async () => {
 		const checkoutEmail = email.trim() || defaultEmail
@@ -184,7 +232,7 @@ const PurchaseForm = ({ user }: { user?: CheckoutUser | null }) => {
 			razorpay.open()
 			setState('idle')
 			setMessage(
-				`Checkout opened for ${orderData.marketLabel}. Razorpay will show supported methods for ${selectedRegion.label}.`
+				`Checkout opened for ${orderData.marketLabel} at ${orderData.displayPrice}. Razorpay will show supported methods for ${selectedRegion.label}.`
 			)
 		} catch (error) {
 			setState('error')
@@ -204,16 +252,16 @@ const PurchaseForm = ({ user }: { user?: CheckoutUser | null }) => {
 				</p>
 				<div className='mt-2 flex items-end gap-2'>
 					<span className='text-3xl font-medium leading-none tracking-[-0.04em] text-white'>
-						{selectedRegion.displayPrice}
+						{isQuoteLoading ? 'Updating...' : quote?.displayPrice ?? 'Price unavailable'}
 					</span>
 					<span className='text-sm text-[var(--color-text-tertiary)]'>
 						/month
 					</span>
 				</div>
 				<p className='mt-2 text-sm leading-6 text-[var(--color-text-tertiary)]'>
-					{selectedRegion.code === 'IN'
-						? 'Indian checkout will use INR and show local Razorpay methods supported by your account.'
-						: 'International checkout will use the regional currency and show supported Razorpay methods.'}
+					{quote
+						? `${quote.currency} price is converted from USD 120 using ${quote.rateSource === 'live' ? 'the latest exchange rate' : 'a fallback exchange rate'}.`
+						: 'The final amount will be recalculated securely when checkout starts.'}
 				</p>
 			</div>
 
