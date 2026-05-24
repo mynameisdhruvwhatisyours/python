@@ -56,9 +56,8 @@ const Pricing: FC = () => {
 							</div>
 							<p className='mt-3 text-sm leading-6 text-[var(--color-text-tertiary)]'>
 								Visitors from {billingMarket.label} will be billed in USD, and
-								checkout supports {billingMarket.methodSummary.toLowerCase()}.
-								The final payment method can be selected before opening
-								Razorpay.
+								Razorpay will show the supported payment methods for the
+								selected region.
 							</p>
 
 							<div className='mt-6 space-y-3'>

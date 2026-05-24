@@ -44,7 +44,7 @@ The app uses only these Vercel environment variables:
 - `RAZORPAY_KEY_ID`
 - `RAZORPAY_KEY_SECRET`
 
-The plan price is fixed at `$120 USD`. Razorpay Checkout supports cards, UPI, netbanking, and wallets, selectable from the pricing card before payment.
+The plan price is fixed at `$120 USD`. Customers select their region and enter the email address where license keys should be sent. Razorpay Checkout then shows the supported payment methods for that region.
 
 Razorpay webhook endpoint:
 

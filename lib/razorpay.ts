@@ -1,7 +1,5 @@
 import { getUserRegion } from './region'
 
-export type PaymentMethod = 'all' | 'card' | 'upi' | 'netbanking' | 'wallet'
-
 export type BillingMarket = {
 	code: 'IN' | 'GLOBAL'
 	label: string
@@ -76,40 +74,27 @@ export const getCountryCodeFromHeaders = (headers: Headers) =>
 	headers.get('x-country-code') ??
 	null
 
-export const normalizePaymentMethod = (
-	paymentMethod?: string | null
-): PaymentMethod => {
-	if (
-		paymentMethod === 'card' ||
-		paymentMethod === 'upi' ||
-		paymentMethod === 'netbanking' ||
-		paymentMethod === 'wallet'
-	) {
-		return paymentMethod
-	}
-
-	return 'all'
-}
-
 export const resolveCheckoutDisplay = (
-	paymentMethod: PaymentMethod
+	billingMarket: BillingMarket
 ): RazorpayCheckoutDisplay => {
-	if (paymentMethod === 'all') {
+	if (billingMarket.code === 'IN') {
 		return {
-			sequence: ['card', 'upi', 'netbanking', 'wallet'],
+			sequence: ['upi', 'netbanking', 'wallet', 'card'],
 			preferences: {
 				show_default_blocks: true,
 			},
 		}
 	}
 
-	const methods: PaymentMethod[] = ['card', 'upi', 'netbanking', 'wallet']
-
 	return {
-		sequence: [paymentMethod],
-		hide: methods
-			.filter((method) => method !== paymentMethod)
-			.map((method) => ({ method })),
+		sequence: ['card'],
+		hide: [
+			{ method: 'upi' },
+			{ method: 'netbanking' },
+			{ method: 'wallet' },
+			{ method: 'emi' },
+			{ method: 'paylater' },
+		],
 		preferences: {
 			show_default_blocks: false,
 		},

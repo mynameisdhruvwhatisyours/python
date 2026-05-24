@@ -4,7 +4,6 @@ import { randomBytes } from 'node:crypto'
 import {
 	getCountryCodeFromHeaders,
 	getRazorpayCredentials,
-	normalizePaymentMethod,
 	razorpayPlan,
 	resolveCheckoutDisplay,
 	resolveBillingMarket,
@@ -19,7 +18,6 @@ export async function POST(request: Request) {
 			email?: string
 			name?: string
 			countryCode?: string
-			paymentMethod?: string
 		}
 		const email = user?.primaryEmailAddress?.emailAddress ?? body.email ?? ''
 		const name = user?.fullName ?? user?.username ?? body.name ?? ''
@@ -30,8 +28,14 @@ export async function POST(request: Request) {
 		const billingMarket = resolveBillingMarket(
 			body.countryCode ?? getCountryCodeFromHeaders(request.headers)
 		)
-		const paymentMethod = normalizePaymentMethod(body.paymentMethod)
-		const checkoutDisplay = resolveCheckoutDisplay(paymentMethod)
+		const checkoutDisplay = resolveCheckoutDisplay(billingMarket)
+
+		if (!email) {
+			return NextResponse.json(
+				{ error: 'Email is required to deliver your license keys.' },
+				{ status: 400 }
+			)
+		}
 
 		const response = await fetch('https://api.razorpay.com/v1/orders', {
 			method: 'POST',
@@ -51,7 +55,6 @@ export async function POST(request: Request) {
 					market: billingMarket.label,
 					region: billingMarket.countryCode,
 					currency: billingMarket.currency,
-					paymentMethod,
 					clerkUserId,
 					email,
 					name,
@@ -109,7 +112,6 @@ export async function POST(request: Request) {
 				planId: razorpayPlan.id,
 				region: billingMarket.countryCode,
 				currency: billingMarket.currency,
-				paymentMethod,
 				clerkUserId,
 				email,
 				name,

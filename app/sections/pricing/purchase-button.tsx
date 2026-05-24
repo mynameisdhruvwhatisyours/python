@@ -1,10 +1,9 @@
 'use client'
 
 import { useUser } from '@clerk/nextjs'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 type PurchaseState = 'idle' | 'loading' | 'success' | 'error'
-type PaymentMethod = 'all' | 'card' | 'upi' | 'netbanking' | 'wallet'
 
 type CreateOrderResponse = {
 	keyId: string
@@ -34,7 +33,21 @@ type CreateOrderError = {
 	details?: string
 }
 
+type CountryOption = {
+	code: string
+	label: string
+}
+
 const CHECKOUT_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js'
+
+const countryOptions: CountryOption[] = [
+	{ code: 'IN', label: 'India' },
+	{ code: 'US', label: 'United States' },
+	{ code: 'GB', label: 'United Kingdom' },
+	{ code: 'CA', label: 'Canada' },
+	{ code: 'AU', label: 'Australia' },
+	{ code: 'GLOBAL', label: 'Other / International' },
+]
 
 const loadCheckoutScript = () =>
 	new Promise<boolean>((resolve) => {
@@ -57,13 +70,29 @@ const loadCheckoutScript = () =>
 
 const PurchaseButton = () => {
 	const { user } = useUser()
+	const defaultEmail = user?.primaryEmailAddress?.emailAddress ?? ''
 	const [state, setState] = useState<PurchaseState>('idle')
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('all')
+	const [countryCode, setCountryCode] = useState('IN')
+	const [email, setEmail] = useState(defaultEmail)
 	const [message, setMessage] = useState(
-		'Secure checkout powered by Razorpay. You can connect provisioning after payment verification.'
+		'Select your region and enter the email where your license keys should be sent.'
+	)
+	const selectedCountry = useMemo(
+		() =>
+			countryOptions.find((country) => country.code === countryCode) ??
+			countryOptions[0],
+		[countryCode]
 	)
 
 	const handlePurchase = async () => {
+		const checkoutEmail = email.trim() || defaultEmail
+
+		if (!checkoutEmail) {
+			setState('error')
+			setMessage('Email is required so we can send your license keys.')
+			return
+		}
+
 		setState('loading')
 		setMessage('Preparing your secure checkout...')
 
@@ -80,9 +109,9 @@ const PurchaseButton = () => {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					email: user?.primaryEmailAddress?.emailAddress ?? '',
+					email: checkoutEmail,
 					name: user?.fullName ?? user?.username ?? '',
-					paymentMethod,
+					countryCode,
 				}),
 			})
 
@@ -108,10 +137,9 @@ const PurchaseButton = () => {
 				description: orderData.description,
 				prefill: {
 					name: user?.fullName ?? user?.username ?? '',
-					email: user?.primaryEmailAddress?.emailAddress ?? '',
+					email: checkoutEmail,
 				},
 				notes: orderData.notes,
-				method: getMethodOptions(paymentMethod),
 				config: {
 					display: orderData.checkoutDisplay,
 				},
@@ -141,7 +169,7 @@ const PurchaseButton = () => {
 					setState('success')
 					setMessage(
 						verifyData.message ??
-							'Payment verified successfully. Connect your fulfillment flow next.'
+							'Payment verified successfully. Your keys will be sent by email.'
 					)
 				},
 				modal: {
@@ -155,7 +183,7 @@ const PurchaseButton = () => {
 			razorpay.open()
 			setState('idle')
 			setMessage(
-				`Checkout opened for ${orderData.marketLabel}. Available methods are tuned for ${orderData.methodSummary.toLowerCase()}.`
+				`Checkout opened for ${orderData.marketLabel}. Razorpay will show supported methods for ${selectedCountry.label}.`
 			)
 		} catch (error) {
 			setState('error')
@@ -168,22 +196,33 @@ const PurchaseButton = () => {
 	}
 
 	return (
-		<div className='mt-6'>
-			<label className='mb-4 block text-sm text-[var(--color-text-tertiary)]'>
-				<span className='mb-2 block text-white'>Payment method</span>
+		<div className='mt-6 space-y-4'>
+			<label className='block text-sm text-[var(--color-text-tertiary)]'>
+				<span className='mb-2 block text-white'>Region</span>
 				<select
-					value={paymentMethod}
-					onChange={(event) =>
-						setPaymentMethod(event.target.value as PaymentMethod)
-					}
+					value={countryCode}
+					onChange={(event) => setCountryCode(event.target.value)}
 					className='h-11 w-full rounded-[12px] border border-white/10 bg-[#0f1113] px-3 text-sm text-white outline-none transition focus:border-white/30'>
-					<option value='all'>All available methods</option>
-					<option value='card'>Cards</option>
-					<option value='upi'>UPI</option>
-					<option value='netbanking'>Netbanking</option>
-					<option value='wallet'>Wallets</option>
+					{countryOptions.map((country) => (
+						<option key={country.code} value={country.code}>
+							{country.label}
+						</option>
+					))}
 				</select>
 			</label>
+
+			<label className='block text-sm text-[var(--color-text-tertiary)]'>
+				<span className='mb-2 block text-white'>Email for license keys</span>
+				<input
+					type='email'
+					value={email}
+					onChange={(event) => setEmail(event.target.value)}
+					placeholder='you@example.com'
+					required
+					className='h-11 w-full rounded-[12px] border border-white/10 bg-[#0f1113] px-3 text-sm text-white outline-none transition placeholder:text-[#62666d] focus:border-white/30'
+				/>
+			</label>
+
 			<button
 				type='button'
 				onClick={handlePurchase}
@@ -192,7 +231,7 @@ const PurchaseButton = () => {
 				{state === 'loading' ? 'Opening Checkout...' : 'Purchase Now'}
 			</button>
 			<p
-				className={`mt-3 text-sm leading-6 ${
+				className={`text-sm leading-6 ${
 					state === 'error'
 						? 'text-[#ff8d8d]'
 						: state === 'success'
@@ -206,16 +245,3 @@ const PurchaseButton = () => {
 }
 
 export default PurchaseButton
-
-function getMethodOptions(paymentMethod: PaymentMethod) {
-	if (paymentMethod === 'all') {
-		return undefined
-	}
-
-	return {
-		card: paymentMethod === 'card',
-		upi: paymentMethod === 'upi',
-		netbanking: paymentMethod === 'netbanking',
-		wallet: paymentMethod === 'wallet',
-	}
-}
