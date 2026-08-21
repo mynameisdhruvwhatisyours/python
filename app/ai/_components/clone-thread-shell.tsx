@@ -29,6 +29,7 @@ import {
   PanelLeftIcon,
   PlusIcon,
   SearchIcon,
+  XIcon,
 } from "lucide-react";
 import {
   useState,
@@ -60,8 +61,6 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
   onCollapsedChange,
   mobileSidebarOpen,
   onMobileSidebarOpenChange,
-  headerContent,
-  sheetTitle,
 }) => {
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const [internalMobileOpen, setInternalMobileOpen] = useState(false);
@@ -69,8 +68,6 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveNavTab>("chat");
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  const hasThreads = useAuiState((s) => s.threads.threadIds.length > 0);
 
   const collapsedControlled = collapsed !== undefined;
   const mobileControlled = mobileSidebarOpen !== undefined;
@@ -92,6 +89,7 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
       setSidebarCollapsed(false);
     }
     setSearchOpen(true);
+    setActiveTab("search");
     setTimeout(() => {
       searchInputRef.current?.focus();
     }, 100);
@@ -197,7 +195,10 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      onClick={() => setActiveTab("chat")}
+                      onClick={() => {
+                        setActiveTab("chat");
+                        setSearchOpen(false);
+                      }}
                       className={cn(
                         navItemCollapsedClass,
                         "bg-[#d3e3fd]/40 text-[#041e49] hover:bg-[#d3e3fd]/70 dark:bg-[#1f3760]/50 dark:text-[#d3e3fd] dark:hover:bg-[#1f3760]",
@@ -213,7 +214,10 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
             ) : (
               <button
                 type="button"
-                onClick={() => setActiveTab("chat")}
+                onClick={() => {
+                  setActiveTab("chat");
+                  setSearchOpen(false);
+                }}
                 className={cn(
                   navItemClass,
                   "bg-[#e8f0fe] text-[#1a73e8] hover:bg-[#d2e3fc] dark:bg-[#1e2a3a] dark:text-[#8ab4f8] dark:hover:bg-[#28374d]",
@@ -245,7 +249,16 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
           ) : (
             <button
               type="button"
-              onClick={() => setSearchOpen(!searchOpen)}
+              onClick={() => {
+                const next = !searchOpen;
+                setSearchOpen(next);
+                if (next) {
+                  setActiveTab("search");
+                  setTimeout(() => searchInputRef.current?.focus(), 100);
+                } else {
+                  setSearch("");
+                }
+              }}
               className={cn(
                 navItemClass,
                 searchOpen &&
@@ -281,7 +294,7 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
           ) : (
             <button
               type="button"
-              onClick={() => setActiveTab("images")}
+              onClick={() => setActiveTab(activeTab === "images" ? "chat" : "images")}
               className={cn(
                 navItemClass,
                 activeTab === "images" &&
@@ -317,7 +330,7 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
           ) : (
             <button
               type="button"
-              onClick={() => setActiveTab("library")}
+              onClick={() => setActiveTab(activeTab === "library" ? "chat" : "library")}
               className={cn(
                 navItemClass,
                 activeTab === "library" &&
@@ -332,7 +345,7 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
 
         {/* Divider */}
         {!sidebarCollapsed && (
-          <div className="mx-4 my-2 border-t border-[#e8eaed] dark:border-[#282a2c]" />
+          <div className="mx-4 my-1.5 border-t border-[#e8eaed] dark:border-[#282a2c]" />
         )}
 
         {/* Chat History Section */}
@@ -344,13 +357,25 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
         >
           {!sidebarCollapsed && (
             <div className="flex items-center justify-between px-3 pt-1 pb-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#747775] dark:text-[#8e918f]">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#747775] dark:text-[#8e918f]">
                 Recent
               </span>
+              {searchOpen && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearch("");
+                  }}
+                  className="text-xs text-[#747775] hover:text-[#1f1f1f] dark:text-[#8e918f] dark:hover:text-white"
+                >
+                  <XIcon className="size-3.5" />
+                </button>
+              )}
             </div>
           )}
 
-          {!sidebarCollapsed && (searchOpen || (hasThreads && search)) && (
+          {!sidebarCollapsed && searchOpen && (
             <div className="px-1 py-1">
               <ThreadListSearch
                 ref={searchInputRef}
@@ -441,8 +466,8 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
             className="relative flex-1 overflow-y-auto px-3 pb-3"
             onClick={closeMobileSidebarAfterNavigation}
           >
-            <div className="px-2 pt-1 pb-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#747775] dark:text-[#8e918f]">
+            <div className="flex items-center justify-between px-2 pt-1 pb-1">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#747775] dark:text-[#8e918f]">
                 Recent
               </span>
             </div>

@@ -4,8 +4,8 @@ import { AssistantRuntimeProvider, useLocalRuntime } from '@assistant-ui/react'
 import type { ChatModelAdapter } from '@assistant-ui/react'
 import { Gemini } from './_components/gemini'
 
-const MyModelAdapter: ChatModelAdapter = {
-	async run({ messages, abortSignal }) {
+const SavoModelAdapter: ChatModelAdapter = {
+	async *run({ messages, abortSignal }) {
 		const formattedMessages = messages.map((m) => {
 			const textContent = m.content
 				.filter((part): part is { type: 'text'; text: string } => part.type === 'text')
@@ -30,14 +30,28 @@ const MyModelAdapter: ChatModelAdapter = {
 			throw new Error(data.error || 'Failed to generate response.')
 		}
 
-		return {
-			content: [{ type: 'text', text: data.message.content }],
+		const fullText = (data.message.content as string) || ''
+
+		// Smooth streaming reveal
+		const chunkSize = Math.max(4, Math.ceil(fullText.length / 30))
+		let current = ''
+		for (let i = 0; i < fullText.length; i += chunkSize) {
+			if (abortSignal.aborted) break
+			current += fullText.slice(i, i + chunkSize)
+			yield {
+				content: [{ type: 'text', text: current }],
+			}
+			await new Promise((r) => setTimeout(r, 16))
+		}
+
+		yield {
+			content: [{ type: 'text', text: fullText }],
 		}
 	},
 }
 
 export default function AiPage() {
-	const runtime = useLocalRuntime(MyModelAdapter)
+	const runtime = useLocalRuntime(SavoModelAdapter)
 
 	return (
 		<AssistantRuntimeProvider runtime={runtime}>
