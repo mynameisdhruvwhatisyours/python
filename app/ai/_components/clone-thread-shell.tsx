@@ -103,7 +103,7 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
     <div className="relative flex h-full w-full overflow-hidden">
       <aside
         className={cn(
-          "bg-muted/30 hidden h-full shrink-0 flex-col overflow-hidden border-r transition-[width] duration-200 md:flex",
+          "hidden h-full shrink-0 flex-col overflow-hidden transition-[width] duration-200 md:flex",
           railClassName,
           sidebarCollapsed ? "w-12" : "w-64",
         )}
