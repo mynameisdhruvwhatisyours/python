@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-	title: 'Gemini',
-	description: 'Gemini AI workspace.',
+	title: 'SavikaBee',
+	description: 'SavikaBee AI workspace powered by Savo 4.2.',
 }
 
 export default function AiLayout({

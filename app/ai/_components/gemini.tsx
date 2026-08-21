@@ -71,7 +71,7 @@ export const Gemini: FC = () => {
             <ThreadPrimitive.ViewportFooter className="sticky bottom-0 mt-auto flex w-full flex-col items-center gap-1.5 bg-[#fdfcfc] px-4 pb-3 dark:bg-[#0c0c0c]">
               <Composer />
               <p className="text-center text-xs text-[#5e6063] dark:text-[#9aa0a6]">
-                Gemini can make mistakes, so double-check it.
+                Savo 4.2 can make mistakes, so double-check it.
               </p>
             </ThreadPrimitive.ViewportFooter>
           </ThreadPrimitive.Viewport>
@@ -99,10 +99,10 @@ const Composer: FC = () => {
         <GeminiPlusMenu />
         <ComposerPrimitive.Input
           rows={1}
-          placeholder="Ask Gemini"
+          placeholder="Ask Savo"
           className="max-h-40 flex-1 resize-none bg-transparent px-2 py-1.5 text-[17px] leading-6 text-[#1f1f1f] outline-none placeholder:text-[#575b5f] dark:text-[#e3e3e3] dark:placeholder:text-[#9aa0a6]"
         />
-        <GeminiModelPicker />
+        <SavoModelPicker />
         <button
           type="button"
           aria-label="Voice mode"
@@ -156,18 +156,17 @@ const GeminiPlusMenu: FC = () => {
   );
 };
 
-const GEMINI_MODELS = [
-  { id: "flash", name: "Flash", description: "Fast all-around help" },
+const SAVO_MODELS = [
   {
-    id: "thinking",
-    name: "Thinking",
-    description: "Reasoning, math & code",
+    id: "savo-4.2",
+    name: "Savo 4.2",
+    description: "Advanced AI for reasoning, coding & everyday tasks",
   },
 ];
 
-const GeminiModelPicker: FC = () => {
-  const [model, setModel] = useState(GEMINI_MODELS[0]!.id);
-  const current = GEMINI_MODELS.find((m) => m.id === model);
+const SavoModelPicker: FC = () => {
+  const [model, setModel] = useState(SAVO_MODELS[0]!.id);
+  const current = SAVO_MODELS.find((m) => m.id === model) ?? SAVO_MODELS[0];
 
   return (
     <DropdownMenu>
@@ -175,13 +174,14 @@ const GeminiModelPicker: FC = () => {
         <button
           type="button"
           className="flex h-9 shrink-0 items-center gap-0.5 rounded-full pr-1.5 pl-3 text-sm whitespace-nowrap text-[#444746] transition-colors hover:bg-[#444746]/8 hover:text-[#1f1f1f] dark:text-[#c4c7c5] dark:hover:bg-[#c4c7c5]/10 dark:hover:text-[#e3e3e3]"
+          aria-label="Select model"
         >
           <span>{current?.name}</span>
           <ChevronDownIcon width={16} height={16} className="opacity-70" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" side="bottom" className="min-w-64">
-        {GEMINI_MODELS.map((m) => (
+        {SAVO_MODELS.map((m) => (
           <DropdownMenuItem
             key={m.id}
             onClick={() => setModel(m.id)}
