@@ -42,12 +42,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AiAccountControl } from "./ai-account-control";
 import { cn } from "@/lib/utils";
 
 export const Gemini: FC = () => {
   return (
     <CloneThreadShell>
-      <ThreadPrimitive.Root className="flex h-full flex-col overflow-hidden bg-[#fdfcfc] text-[#1f1f1f] dark:bg-[#0c0c0c] dark:text-[#e3e3e3]">
+      <ThreadPrimitive.Root className="relative flex h-full flex-col overflow-hidden bg-[#fdfcfc] text-[#1f1f1f] dark:bg-[#0c0c0c] dark:text-[#e3e3e3]">
+        {/* Top Header Bar with Google/Gemini-Style AI Account Control */}
+        <div className="absolute top-3 right-4 z-30 flex items-center gap-2.5">
+          <AiAccountControl />
+        </div>
+
         <AuiIf condition={(s) => s.thread.messages.length === 0}>
           <div className="relative flex grow flex-col">
             <div className="flex grow flex-col items-center justify-center px-4 py-8">
