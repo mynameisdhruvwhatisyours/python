@@ -64,7 +64,7 @@ export default function ChatWorkspace() {
 		{drawerOpen && <button className={styles.backdrop} aria-label='Close chat navigation' onClick={() => setDrawerOpen(false)} />}
 		<aside className={`${styles.sidebar} ${drawerOpen ? styles.sidebarOpen : ''}`} aria-label='Chat history'>
 			<div className={styles.sidebarTop}><a href='/' className={styles.brand} aria-label='Savikabee website'><span className={styles.brandMark}><Sparkles size={15} /></span><span>Savikabee AI</span></a><button className={styles.closeDrawer} onClick={() => setDrawerOpen(false)} aria-label='Close menu'><X size={19} /></button></div>
-			<button className={styles.newChat} onClick={createConversation}><Plus size={15} /> New chat</button>
+			<button className={styles.newChat} onClick={createConversation}><Plus size={15} /> <span>New chat</span><kbd>Ctrl K</kbd></button>
 			<nav className={styles.history}><p className={styles.historyLabel}>Chats</p>{conversations.map((conversation) => <button key={conversation.id} className={conversation.id === activeId ? styles.activeConversation : ''} onClick={() => { setActiveId(conversation.id); setDrawerOpen(false) }}><MessageSquare size={15} /><span>{conversation.title}</span></button>)}</nav>
 			<div className={styles.sidebarFoot}><span className={styles.profileDot}><Bot size={14} /></span><span><strong>Local workspace</strong><small>Mock mode</small></span></div>
 		</aside>
