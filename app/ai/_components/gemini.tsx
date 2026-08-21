@@ -54,7 +54,7 @@ export const Gemini: FC = () => {
                 <div className="relative">
                   <div
                     aria-hidden="true"
-                    className="fade-in zoom-in-40 blur-in-[90px] motion-safe:animate-in fill-mode-both pointer-events-none absolute top-1/2 left-1/2 h-[260px] w-[680px] max-w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-[140px] bg-[#a9d1fb]/60 blur-[90px] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#1b2f9c]/50"
+                    className="fade-in zoom-in-40 blur-in-[90px] motion-safe:animate-in fill-mode-both pointer-events-none absolute top-1/2 left-1/2 h-[260px] w-[680px] max-w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-[140px] bg-[#1a73e8]/35 blur-[85px] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#124294]/65"
                   />
                   <div className="relative z-10">
                     <Composer />
