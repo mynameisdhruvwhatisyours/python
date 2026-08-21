@@ -124,7 +124,14 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
         )}
       >
         {/* Header with SavikaBee S logo and Toggle button */}
-        <div className="flex h-14 shrink-0 items-center justify-between overflow-hidden px-3">
+        <div
+          className={cn(
+            "shrink-0 flex items-center transition-all duration-200",
+            sidebarCollapsed
+              ? "w-full flex-col justify-start py-3 gap-2 px-1 h-auto"
+              : "h-14 justify-between px-3.5",
+          )}
+        >
           {sidebarCollapsed ? (
             <div className="flex w-full flex-col items-center gap-2">
               <TooltipProvider>
@@ -133,7 +140,7 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
                     <button
                       type="button"
                       onClick={() => setSidebarCollapsed(false)}
-                      className="flex size-9 items-center justify-center rounded-lg transition-transform hover:scale-105"
+                      className="flex size-9 items-center justify-center rounded-xl transition-all hover:scale-105 hover:bg-[#444746]/8 dark:hover:bg-[#c4c7c5]/10"
                       aria-label="SavikaBee"
                     >
                       <SavikaBeeLogo size={24} />
