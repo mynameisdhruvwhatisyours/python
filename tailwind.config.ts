@@ -69,14 +69,14 @@ const config = {
           to: { height: "0" },
         },
         "ambient-breathe": {
-          "0%, 100%": { transform: "translate(-50%, -50%) scale(1)", opacity: "0.85" },
-          "50%": { transform: "translate(-50%, -50%) scale(1.05)", opacity: "1" },
+          "0%, 100%": { transform: "translate(-50%, -50%) scale(1)", opacity: "0.94" },
+          "50%": { transform: "translate(-50%, -50%) scale(1.02)", opacity: "1" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "ambient-breathe": "ambient-breathe 9s ease-in-out infinite",
+        "ambient-breathe": "ambient-breathe 10s ease-in-out infinite",
       },
     },
   },

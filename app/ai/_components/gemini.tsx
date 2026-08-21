@@ -57,14 +57,20 @@ export const Gemini: FC = () => {
                 </h1>
 
                 <div className="relative w-full">
-                  {/* Multi-layered atmospheric deep-blue glow */}
+                  {/* Layer 3 — Outer atmosphere (1100px, blur 140px) */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[340px] w-[760px] max-w-[95%] -translate-x-1/2 -translate-y-1/2 rounded-[180px] bg-[radial-gradient(ellipse_at_center,_#1a73e8_0%,_transparent_70%)] opacity-20 blur-[100px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#123b82_0%,_transparent_70%)] dark:opacity-45 duration-1000"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[480px] w-[1100px] max-w-[98%] -translate-x-1/2 -translate-y-1/2 rounded-[240px] bg-[radial-gradient(ellipse_at_center,_rgba(37,99,235,0.10)_0%,_transparent_80%)] blur-[140px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_rgba(37,99,235,0.12)_0%,_transparent_80%)]"
                   />
+                  {/* Layer 2 — Secondary (850px, blur 120px) */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[220px] w-[580px] max-w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-[120px] bg-[radial-gradient(ellipse_at_center,_#2b66dd_0%,_transparent_65%)] opacity-20 blur-[65px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#1a4fb5_0%,_transparent_65%)] dark:opacity-35 duration-1000"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[380px] w-[850px] max-w-[94%] -translate-x-1/2 -translate-y-1/2 rounded-[190px] bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.18)_0%,_transparent_75%)] blur-[120px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.20)_0%,_transparent_75%)]"
+                  />
+                  {/* Layer 1 — Core (600px, blur 90px) */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[280px] w-[600px] max-w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-[140px] bg-[radial-gradient(ellipse_at_center,_rgba(66,133,244,0.32)_0%,_transparent_75%)] blur-[90px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_rgba(66,133,244,0.35)_0%,_transparent_75%)]"
                   />
                   <div className="relative z-10">
                     <Composer />
