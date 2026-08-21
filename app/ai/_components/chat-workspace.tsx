@@ -1,13 +1,19 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Bot, ChevronLeft, Menu, MessageSquare, Plus, RefreshCw, Send, Sparkles, X } from 'lucide-react'
+import { ArrowUpRight, Bot, ChevronLeft, FileText, Lightbulb, Menu, MessageSquare, PenLine, Plus, RefreshCw, Search, Send, Sparkles, X } from 'lucide-react'
 import MessageContent from './message-content'
 import type { ChatMessage, ChatResponse } from '@/lib/ai/types'
 import styles from './styles.module.css'
 
 type Conversation = { id: string; title: string; messages: ChatMessage[] }
 const makeConversation = (): Conversation => ({ id: crypto.randomUUID(), title: 'New conversation', messages: [] })
+const suggestions = [
+	{ label: 'Untangle an idea', detail: 'Explore a question from a new angle', icon: Lightbulb },
+	{ label: 'Write with clarity', detail: 'Draft, rewrite, or refine a message', icon: PenLine },
+	{ label: 'Make a plan', detail: 'Turn an outcome into practical next steps', icon: FileText },
+	{ label: 'Look into a topic', detail: 'Break down a complex subject', icon: Search },
+]
 
 export default function ChatWorkspace() {
 	const [conversations, setConversations] = useState<Conversation[]>([])
@@ -83,13 +89,13 @@ export default function ChatWorkspace() {
 		<aside className={`${styles.sidebar} ${drawerOpen ? styles.sidebarOpen : ''}`} aria-label='Chat history'>
 			<div className={styles.sidebarTop}><a href='/' className={styles.brand}><Sparkles size={18} /> Savikabee AI</a><button className={styles.closeDrawer} onClick={() => setDrawerOpen(false)} aria-label='Close menu'><X size={19} /></button></div>
 			<button className={styles.newChat} onClick={createConversation}><Plus size={17} /> New chat</button>
-			<nav className={styles.history}>{conversations.map((conversation) => <button key={conversation.id} className={conversation.id === activeId ? styles.activeConversation : ''} onClick={() => { setActiveId(conversation.id); setDrawerOpen(false) }}><MessageSquare size={16} /><span>{conversation.title}</span></button>)}</nav>
+			<nav className={styles.history}><p className={styles.historyLabel}>Recent</p>{conversations.map((conversation) => <button key={conversation.id} className={conversation.id === activeId ? styles.activeConversation : ''} onClick={() => { setActiveId(conversation.id); setDrawerOpen(false) }}><MessageSquare size={16} /><span>{conversation.title}</span></button>)}</nav>
 			<div className={styles.sidebarFoot}><Bot size={16} /> Mock mode enabled</div>
 		</aside>
 		<section className={styles.chat}>
 			<header className={styles.chatHeader}><button className={styles.menuButton} onClick={() => setDrawerOpen(true)} aria-label='Open chat navigation'><Menu size={20} /></button><div><strong>Savikabee AI</strong><span>Development workspace</span></div><a href='/' className={styles.backLink}><ChevronLeft size={16} /> Website</a></header>
 			<div className={styles.messages} aria-live='polite'>
-				{active?.messages.length === 0 && <div className={styles.welcome}><div className={styles.welcomeIcon}><Sparkles size={28} /></div><h1>How can I help today?</h1><p>Ask a question to test the Savikabee AI experience. Responses are currently generated locally by a mock server provider.</p><div className={styles.suggestions}>{['Help me plan a project', 'Explain a technical topic', 'Draft a customer reply'].map((suggestion) => <button key={suggestion} onClick={() => setDraft(suggestion)}>{suggestion}</button>)}</div></div>}
+				{active?.messages.length === 0 && <div className={styles.welcome}><div className={styles.welcomeEyebrow}><span><Sparkles size={14} /></span> Savikabee AI</div><h1>What would you like<br />to explore?</h1><p>A quiet space to think, write, and turn ideas into progress.</p><div className={styles.suggestions}>{suggestions.map((suggestion) => { const Icon = suggestion.icon; return <button key={suggestion.label} onClick={() => setDraft(suggestion.label)}><Icon size={18} /><span><strong>{suggestion.label}</strong><small>{suggestion.detail}</small></span><ArrowUpRight size={16} /></button> })}</div></div>}
 				{active?.messages.map((message) => <MessageContent key={message.id} message={message} copied={copiedId === message.id} onCopy={() => copy(message)} />)}
 				{isLoading && <div className={styles.typing}><div className={styles.avatar}>S</div><span /><span /><span /><em>Thinking</em></div>}
 				{error && <div className={styles.error}><span>{error}</span><button onClick={() => { const last = active?.messages[active.messages.length - 1]; if (last?.role === 'user') submit(last.content) }}>Try again</button></div>}
