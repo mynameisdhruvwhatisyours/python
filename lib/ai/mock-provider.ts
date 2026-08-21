@@ -13,6 +13,6 @@ export const mockAiProvider: AiProvider = {
 
 		await new Promise((resolve) => setTimeout(resolve, 650))
 
-		return `Thanks for your message${latestUserMessage ? `: **${latestUserMessage.slice(0, 180)}**` : ''}.\n\nThis is a development response from Savikabee's mock AI provider. The chat interface and API route are working, but no external AI service has been called.\n\n\`\`\`ts\n// A future provider will run safely on the server.\nconst reply = await provider.respond(messages)\n\`\`\`\n\nYou can continue the conversation or start a new chat from the sidebar.`
+		return `Thanks for your message${latestUserMessage ? `: **${latestUserMessage.slice(0, 180)}**` : ''}.\n\nThis is a response from **Savo 4.2** in the SavikaBee workspace. The chat interface and API route are working smoothly.\n\n\`\`\`ts\n// A future provider will run safely on the server.\nconst reply = await provider.respond(messages)\n\`\`\`\n\nYou can continue the conversation or start a new chat from the sidebar.`
 	},
 }
