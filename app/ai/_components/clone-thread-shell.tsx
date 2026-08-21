@@ -7,6 +7,7 @@ import {
 } from "@/components/assistant-ui/thread-list";
 import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
 import { SavikaBeeLogo } from "@/components/icons/savikabee-logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -396,6 +397,16 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
             )}
           />
         </ThreadListRoot>
+
+        {/* Theme Toggle at sidebar bottom */}
+        <div
+          className={cn(
+            "shrink-0 border-t border-[#e8eaed] dark:border-[#282a2c] px-2.5 py-2",
+            sidebarCollapsed && "flex justify-center px-1",
+          )}
+        >
+          <ThemeToggle collapsed={sidebarCollapsed} />
+        </div>
       </aside>
 
       {/* Mobile Drawer Sheet */}
@@ -473,6 +484,10 @@ export const CloneThreadShell: FC<CloneThreadShellProps> = ({
             </div>
             <ThreadListSearch value={search} onValueChange={setSearch} />
             <ThreadListItems searchQuery={search} />
+          </div>
+
+          <div className="shrink-0 border-t border-[#e8eaed] dark:border-[#282a2c] px-3 py-2">
+            <ThemeToggle />
           </div>
         </SheetContent>
       </Sheet>

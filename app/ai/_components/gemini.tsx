@@ -57,9 +57,14 @@ export const Gemini: FC = () => {
                 </h1>
 
                 <div className="relative w-full">
+                  {/* Multi-layered atmospheric deep-blue glow */}
                   <div
                     aria-hidden="true"
-                    className="fade-in zoom-in-40 blur-in-[90px] motion-safe:animate-in fill-mode-both pointer-events-none absolute top-1/2 left-1/2 h-[260px] w-[680px] max-w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-[140px] bg-[#1a73e8]/35 blur-[85px] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] dark:bg-[#124294]/65"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[340px] w-[760px] max-w-[95%] -translate-x-1/2 -translate-y-1/2 rounded-[180px] bg-[radial-gradient(ellipse_at_center,_#1a73e8_0%,_transparent_70%)] opacity-20 blur-[100px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#123b82_0%,_transparent_70%)] dark:opacity-45 duration-1000"
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[220px] w-[580px] max-w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-[120px] bg-[radial-gradient(ellipse_at_center,_#2b66dd_0%,_transparent_65%)] opacity-20 blur-[65px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#1a4fb5_0%,_transparent_65%)] dark:opacity-35 duration-1000"
                   />
                   <div className="relative z-10">
                     <Composer />
