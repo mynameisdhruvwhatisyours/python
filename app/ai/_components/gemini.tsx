@@ -57,20 +57,21 @@ export const Gemini: FC = () => {
                 </h1>
 
                 <div className="relative w-full">
-                  {/* Layer 3 — Outer atmosphere (1100px, blur 140px) */}
+                  {/* Reference-matched luminous azure atmospheric glow */}
+                  {/* Layer 3 — Wide outer aura (980px, blur 110px) */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[480px] w-[1100px] max-w-[98%] -translate-x-1/2 -translate-y-1/2 rounded-[240px] bg-[radial-gradient(ellipse_at_center,_rgba(37,99,235,0.10)_0%,_transparent_80%)] blur-[140px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_rgba(37,99,235,0.12)_0%,_transparent_80%)]"
+                    className="pointer-events-none absolute top-[52%] left-1/2 h-[480px] w-[980px] max-w-[98%] -translate-x-1/2 -translate-y-1/2 rounded-[240px] bg-[radial-gradient(ellipse_at_center,_#93c5fd_0%,_#bfdbfe_45%,_transparent_75%)] opacity-65 blur-[110px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#1d4ed8_0%,_#1e3a8a_50%,_transparent_75%)] dark:opacity-60"
                   />
-                  {/* Layer 2 — Secondary (850px, blur 120px) */}
+                  {/* Layer 2 — Medium atmospheric cloud (780px, blur 85px) */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[380px] w-[850px] max-w-[94%] -translate-x-1/2 -translate-y-1/2 rounded-[190px] bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.18)_0%,_transparent_75%)] blur-[120px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_rgba(59,130,246,0.20)_0%,_transparent_75%)]"
+                    className="pointer-events-none absolute top-[52%] left-1/2 h-[340px] w-[780px] max-w-[94%] -translate-x-1/2 -translate-y-1/2 rounded-[170px] bg-[radial-gradient(ellipse_at_center,_#68a8ff_0%,_#9bc8ff_45%,_transparent_75%)] opacity-75 blur-[85px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#2563eb_0%,_#1e40af_50%,_transparent_75%)] dark:opacity-70"
                   />
-                  {/* Layer 1 — Core (600px, blur 90px) */}
+                  {/* Layer 1 — Core luminous glow (560px, blur 60px) */}
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[280px] w-[600px] max-w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-[140px] bg-[radial-gradient(ellipse_at_center,_rgba(66,133,244,0.32)_0%,_transparent_75%)] blur-[90px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_rgba(66,133,244,0.35)_0%,_transparent_75%)]"
+                    className="pointer-events-none absolute top-[54%] left-1/2 h-[220px] w-[560px] max-w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-[110px] bg-[radial-gradient(ellipse_at_center,_#4094ff_0%,_#70b0ff_50%,_transparent_70%)] opacity-60 blur-[60px] motion-safe:animate-ambient-breathe motion-reduce:animate-none dark:bg-[radial-gradient(ellipse_at_center,_#3b82f6_0%,_#1d4ed8_50%,_transparent_70%)] dark:opacity-65"
                   />
                   <div className="relative z-10">
                     <Composer />
