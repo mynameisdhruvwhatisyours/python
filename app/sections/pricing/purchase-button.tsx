@@ -5,9 +5,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { isClerkConfigured } from '@/lib/env'
 import { checkoutRegions } from '@/lib/region'
 
-// ─── Feature flag ──────────────────────────────────────────────────────────────
-// Set to `true` to restore the full Razorpay checkout flow.
-const PAYMENTS_ENABLED = false
+// ─── Payment Flow ─────────────────────────────────────────────────────────────
+// Access is enforced server-side via Clerk verified session & Neon authorized_users table.
+const PAYMENTS_ENABLED = true
 // ───────────────────────────────────────────────────────────────────────────────
 
 type PurchaseState = 'idle' | 'loading' | 'success' | 'error'
@@ -139,15 +139,13 @@ const PurchaseForm = ({ user }: { user?: CheckoutUser | null }) => {
 	}, [countryCode])
 
 	const handlePurchase = async () => {
-		// ── Payments temporarily disabled ──────────────────────────────────────────
 		if (!PAYMENTS_ENABLED) {
 			setState('error')
 			setMessage(
-				'Payments are temporarily unavailable. Please check back soon — we\'ll have this ready for you shortly.'
+				'Payments are temporarily unavailable. Please check back later.'
 			)
 			return
 		}
-		// ──────────────────────────────────────────────────────────────────────────
 
 		const checkoutEmail = email.trim() || defaultEmail
 

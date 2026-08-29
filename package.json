@@ -12,6 +12,7 @@
     "@assistant-ui/react": "^0.15.16",
     "@assistant-ui/react-markdown": "^0.14.12",
     "@clerk/nextjs": "^6.0.0",
+    "@neondatabase/serverless": "^1.1.0",
     "@svgr/webpack": "^8.1.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",

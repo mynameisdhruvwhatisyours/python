@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { currentUser } from '@clerk/nextjs/server'
 import { randomBytes } from 'node:crypto'
+import { checkPaymentAuthorization } from '@/lib/auth-check'
 import {
 	getCountryCodeFromHeaders,
 	getRazorpayCredentials,
@@ -13,15 +13,34 @@ export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
 	try {
-		const user = await currentUser()
+		// Server-side authorization check (Clerk verified session -> Neon authorized_users table)
+		const authResult = await checkPaymentAuthorization()
+
+		if (!authResult.authorized) {
+			if (authResult.reason === 'unauthenticated') {
+				return NextResponse.json(
+					{ error: 'Please sign in to initiate checkout.' },
+					{ status: 401 }
+				)
+			}
+			if (authResult.reason === 'db_not_configured') {
+				return NextResponse.json(
+					{ error: 'Payments are temporarily unavailable. Please check back later.' },
+					{ status: 503 }
+				)
+			}
+			return NextResponse.json(
+				{ error: 'You are not authorized to access checkout.' },
+				{ status: 403 }
+			)
+		}
+
 		const body = (await request.json().catch(() => ({}))) as {
-			email?: string
-			name?: string
 			countryCode?: string
 		}
-		const email = user?.primaryEmailAddress?.emailAddress ?? body.email ?? ''
-		const name = user?.fullName ?? user?.username ?? body.name ?? ''
-		const clerkUserId = user?.id ?? ''
+		const email = authResult.user.email
+		const name = authResult.user.name
+		const clerkUserId = authResult.user.clerkUserId
 		const { keyId, keySecret } = getRazorpayCredentials()
 		const authToken = Buffer.from(`${keyId}:${keySecret}`).toString('base64')
 		const receipt = `ved-${Date.now()}-${randomBytes(4).toString('hex')}`
