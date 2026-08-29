@@ -1,0 +1,95 @@
+# SavikaBee Authorized Users Management - Neon SQL Cheat Sheet
+
+This guide contains all SQL commands to manage authorized users who have access to the payment/Razorpay checkout.
+Run these commands in the Neon Query Console (SQL Editor).
+
+--------------------------------------------------------------------------------
+1. VIEW & CHECK USERS
+--------------------------------------------------------------------------------
+
+-- View all users (both active & disabled)
+SELECT id, email, active, clerk_user_id, created_at, updated_at 
+FROM authorized_users 
+ORDER BY created_at DESC;
+
+-- View ONLY active users (who currently have checkout access)
+SELECT email, clerk_user_id, updated_at 
+FROM authorized_users 
+WHERE active = TRUE;
+
+-- View ONLY disabled / revoked users
+SELECT email, updated_at 
+FROM authorized_users 
+WHERE active = FALSE;
+
+-- Check status of a specific email
+SELECT * FROM authorized_users 
+WHERE LOWER(email) = LOWER('vijendarb@gmail.com');
+
+
+--------------------------------------------------------------------------------
+2. ADD / GRANT ACCESS
+--------------------------------------------------------------------------------
+
+-- Add a single user (or re-enable if already in table)
+INSERT INTO authorized_users (email, active)
+VALUES ('user@example.com', TRUE)
+ON CONFLICT (email) 
+DO UPDATE SET active = TRUE, updated_at = NOW();
+
+-- Add multiple users at once
+INSERT INTO authorized_users (email, active)
+VALUES 
+  ('user1@example.com', TRUE),
+  ('user2@example.com', TRUE),
+  ('user3@example.com', TRUE)
+ON CONFLICT (email) 
+DO UPDATE SET active = TRUE, updated_at = NOW();
+
+
+--------------------------------------------------------------------------------
+3. DISABLE / REVOKE ACCESS (SAFE METHOD)
+--------------------------------------------------------------------------------
+
+-- Temporarily disable a user (keeps history, blocks access immediately)
+UPDATE authorized_users 
+SET active = FALSE, updated_at = NOW() 
+WHERE LOWER(email) = LOWER('user@example.com');
+
+-- Re-enable a disabled user
+UPDATE authorized_users 
+SET active = TRUE, updated_at = NOW() 
+WHERE LOWER(email) = LOWER('user@example.com');
+
+
+--------------------------------------------------------------------------------
+4. PERMANENTLY DELETE USERS
+--------------------------------------------------------------------------------
+
+-- Permanently remove a single user
+DELETE FROM authorized_users 
+WHERE LOWER(email) = LOWER('user@example.com');
+
+-- Permanently remove all disabled users
+DELETE FROM authorized_users 
+WHERE active = FALSE;
+
+
+--------------------------------------------------------------------------------
+5. RESET CLERK ID BINDING
+--------------------------------------------------------------------------------
+-- If a user deleted and recreated their Clerk account with the same email,
+-- run this to clear the old Clerk user ID binding so it auto-links on next login:
+UPDATE authorized_users 
+SET clerk_user_id = NULL, updated_at = NOW() 
+WHERE LOWER(email) = LOWER('user@example.com');
+
+
+--------------------------------------------------------------------------------
+6. QUICK REFERENCE SUMMARY
+--------------------------------------------------------------------------------
+Add user:      INSERT INTO authorized_users (email, active) VALUES ('user@xyz.com', TRUE);
+Disable user:  UPDATE authorized_users SET active = FALSE WHERE LOWER(email) = 'user@xyz.com';
+Enable user:   UPDATE authorized_users SET active = TRUE WHERE LOWER(email) = 'user@xyz.com';
+Delete user:   DELETE FROM authorized_users WHERE LOWER(email) = 'user@xyz.com';
+List all:      SELECT * FROM authorized_users;

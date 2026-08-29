@@ -114,8 +114,8 @@ export async function checkPaymentAuthorization(): Promise<AuthorizationResult> 
 		}
 	} catch (error) {
 		const errorMessage = error instanceof Error ? error.message : String(error)
-		if (errorMessage.includes('DATABASE_URL')) {
-			console.warn('[AUTH] DATABASE_URL is not configured on the server.')
+		if (errorMessage.includes('DATABASE_URL') || errorMessage.includes('POSTGRES_URL')) {
+			console.warn('[AUTH] DATABASE_URL / POSTGRES_URL is not configured on the server.')
 			return { authorized: false, reason: 'db_not_configured' }
 		}
 
